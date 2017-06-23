@@ -6,11 +6,10 @@ import (
 	"net/url"
 	//"errors"
 	"encoding/json"
-	"github.com/davecgh/go-spew/spew"
 	"io/ioutil"
 )
 
-type loginResponse struct {
+type session struct {
 	JsessionId string `json:"jsessionid"`
 	AlfTicket  string `json:"alf_ticket"`
 }
@@ -20,14 +19,14 @@ type credentials struct {
 	Password string `json:"password"`
 }
 
-type tickets struct {
+type ticket struct {
 	Data struct {
 		Ticket string `json:"ticket"`
 	} `json:"data"`
 }
 
-func Login(loginMethod bool) {
-	lr := loginResponse{}
+func Login(ticketOnly bool) (session, error) {
+	s := session{}
 	apiUrl := "http://62.210.250.198:8080"
 	resource := "/share/page/dologin"
 	resourcews := "/alfresco/s/api/login" //wb: webscript
@@ -44,13 +43,13 @@ func Login(loginMethod bool) {
 		},
 	}
 
-	if loginMethod {
+	if !ticketOnly {
 		r, _ := http.NewRequest("POST", urlStr, bytes.NewBufferString(data.Encode()))
 		r.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 		resp, _ := client.Do(r)
 		for i := 0; i < len(resp.Cookies()); i++ {
 			if resp.Cookies()[i].Name == "JSESSIONID" {
-				lr.JsessionId = resp.Cookies()[i].Value
+				s.JsessionId = resp.Cookies()[i].Value
 			}
 		}
 	} else {
@@ -61,12 +60,12 @@ func Login(loginMethod bool) {
 		req.Header.Set("Content-Type", "application/json")
 		resp, _ := client.Do(req)
 		bodyBytes, _ := ioutil.ReadAll(resp.Body)
-		res := &tickets{}
+		res := &ticket{}
 		err := json.Unmarshal(bodyBytes, &res)
 		if err != nil {
-			spew.Dump(err.Error())
+			return s, err
 		}
-		lr.AlfTicket = res.Data.Ticket
+		s.AlfTicket = res.Data.Ticket
 	}
-	spew.Dump(lr)
+	return s, nil
 }
