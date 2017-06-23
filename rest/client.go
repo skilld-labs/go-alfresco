@@ -44,11 +44,6 @@ func (c *Client) getUrl() string {
 func (c *Client) doRequest(request *http.Request, responseBody interface{}) error {
 	if c.auth != nil {
 		request.Header.Set("X-Auth-Token", c.auth.token)
-		request.Header.Set("X-User-Id", c.auth.id)
-	}
-
-	if c.Debug {
-		log.Println(request)
 	}
 
 	response, err := http.DefaultClient.Do(request)
@@ -60,9 +55,6 @@ func (c *Client) doRequest(request *http.Request, responseBody interface{}) erro
 	defer response.Body.Close()
 	bodyBytes, err := ioutil.ReadAll(response.Body)
 
-	if c.Debug {
-		log.Println(string(bodyBytes))
-	}
 
 	if response.StatusCode != http.StatusOK {
 		return errors.New("Request error: " + response.Status)
