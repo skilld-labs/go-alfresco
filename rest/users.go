@@ -1,11 +1,14 @@
 package rest
 
 import (
+	"../api"
 	"bytes"
+	//"fmt"
 	"net/http"
 	"net/url"
 	//"errors"
 	"encoding/json"
+	//"github.com/davecgh/go-spew/spew"
 	"io/ioutil"
 )
 
@@ -14,7 +17,7 @@ type session struct {
 	AlfTicket  string `json:"alf_ticket"`
 }
 
-type credentials struct {
+type Credentials struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
@@ -25,47 +28,84 @@ type ticket struct {
 	} `json:"data"`
 }
 
-func Login(ticketOnly bool) (session, error) {
-	s := session{}
-	apiUrl := "http://62.210.250.198:8080"
-	resource := "/share/page/dologin"
-	resourcews := "/alfresco/s/api/login" //wb: webscript
+type Users struct {
+	Users []api.User `json:"people"`
+}
+
+type User api.User
+
+func (c *Client) Login(cred Credentials, ticketOnly bool) error {
+	c.auth = &authInfo{}
 	data := url.Values{}
-	data.Set("username", "admin")
-	data.Add("password", "RT13sk37")
-	val := credentials{"admin", "RT13sk37"}
-	u, _ := url.ParseRequestURI(apiUrl)
-	u.Path = resource
-	urlStr := u.String()
-	client := &http.Client{
-		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-			return http.ErrUseLastResponse
-		},
-	}
+	data.Set("username", cred.Username)
+	data.Add("password", cred.Password)
+	val := Credentials{cred.Username, cred.Password}
+	jsonVal, _ := json.Marshal(val)
 
 	if !ticketOnly {
-		r, _ := http.NewRequest("POST", urlStr, bytes.NewBufferString(data.Encode()))
+		var cookies map[string]string
+		r, _ := http.NewRequest("POST", c.getUrl()+"/share/page/dologin", bytes.NewBufferString(data.Encode()))
 		r.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-		resp, _ := client.Do(r)
-		for i := 0; i < len(resp.Cookies()); i++ {
-			if resp.Cookies()[i].Name == "JSESSIONID" {
-				s.JsessionId = resp.Cookies()[i].Value
-			}
-		}
-	} else {
-		jsonVal, _ := json.Marshal(val)
-		u.Path = resourcews
-		urlStr = u.String()
-		req, _ := http.NewRequest("POST", urlStr, bytes.NewBufferString(string(jsonVal)))
-		req.Header.Set("Content-Type", "application/json")
-		resp, _ := client.Do(req)
-		bodyBytes, _ := ioutil.ReadAll(resp.Body)
-		res := &ticket{}
-		err := json.Unmarshal(bodyBytes, &res)
+		_, cookies, err := c.doRequest(r, nil)
 		if err != nil {
-			return s, err
+			return err
 		}
-		s.AlfTicket = res.Data.Ticket
+		if s, exists := cookies["JSESSIONID"]; exists {
+			c.auth.JsessionID = s
+		}
 	}
-	return s, nil
+
+	req, _ := http.NewRequest("POST", c.getUrl()+"/alfresco/s/api/login", bytes.NewBufferString(string(jsonVal)))
+	req.Header.Set("Content-Type", "application/json")
+	response := new(ticket)
+	if _, _, err := c.doRequest(req, response); err != nil {
+		return err
+	}
+	c.auth.AlfTicket = response.Data.Ticket
+
+	return nil
+}
+
+func GetUsers(ticket session) (*Users, error) {
+	apiUrl := "http://62.210.250.198:8080"
+	resource := "/alfresco/s/api/people"
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", apiUrl+resource, nil)
+	if err != nil {
+		return nil, err
+	}
+	q := req.URL.Query()
+	q.Add("alf_ticket", ticket.AlfTicket)
+	req.URL.RawQuery = q.Encode()
+
+	resp, _ := client.Do(req)
+	bodyBytes, _ := ioutil.ReadAll(resp.Body)
+	u := &Users{}
+	err = json.Unmarshal(bodyBytes, &u)
+	if err != nil {
+		return u, err
+	}
+	return u, nil
+}
+
+func GetUser(ticket session, userName string) (*User, error) {
+	apiUrl := "http://62.210.250.198:8080"
+	resource := "/alfresco/s/api/people/"
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", apiUrl+resource+userName, nil)
+	if err != nil {
+		return nil, err
+	}
+	q := req.URL.Query()
+	q.Add("alf_ticket", ticket.AlfTicket)
+	req.URL.RawQuery = q.Encode()
+
+	resp, _ := client.Do(req)
+	bodyBytes, _ := ioutil.ReadAll(resp.Body)
+	u := &User{}
+	err = json.Unmarshal(bodyBytes, &u)
+	if err != nil {
+		return u, err
+	}
+	return u, nil
 }

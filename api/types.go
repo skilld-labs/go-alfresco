@@ -16,6 +16,7 @@ type User struct {
 	CompanyAddress1     string `json:"companyaddress1"`
 	CompanyAddress2     string `json:"companyaddress2"`
 	CompanyAddress3     string `json:"companyaddress3"`
+	CompanyPostCode     string `json:"companypostcode"`
 	CompanyTelephone    string `json:"companytelephone"`
 	CompanyFax          string `json:"companyfax"`
 	CompanyEmail        string `json:"companyemail"`
@@ -50,4 +51,21 @@ type Site struct {
 	IsMemberOfGroup bool     `json:"isMemberOfGroup"`
 	IsPublic        bool     `json:"isPublic"`
 	Visibility      string   `json:"visibility"`
+}
+
+type Node struct {
+	NumResults int `json:"numResults"`
+	Results    []struct {
+		NodeRef   string `json:"nodeRef"`
+		QNamePath struct {
+			Name         string `json:"name"`
+			PrefixedName string `json:"prefixedName"`
+		} `json:"qnamePath"`
+		Name struct {
+			Name         string `json:"name"`
+			PrefixedName string `json:"prefixedName"`
+		} `json:"name"`
+		ParentNodeRef string `json:"parentNodeRef"`
+	} `json:"results"`
+	SearchElapsedTime int `json:"searchElapsedTime"`
 }

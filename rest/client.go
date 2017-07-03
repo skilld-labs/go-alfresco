@@ -1,23 +1,23 @@
 package rest
 
 import (
-	"net/http"
 	"encoding/json"
 	"errors"
-	"io/ioutil"
 	"fmt"
+	"io/ioutil"
+	"net/http"
 )
 
 type Client struct {
 	Protocol string
 	Host     string
 	Port     string
-	Debug    bool
 	auth     *authInfo
 }
 
 type authInfo struct {
-	token string
+	JsessionID string
+	AlfTicket  string
 }
 
 type statusResponse struct {
@@ -25,7 +25,7 @@ type statusResponse struct {
 	Message string `json:"message"`
 }
 
-func NewClient(host, port string, tls, debug bool) (*Client) {
+func NewClient(host string, port string, tls bool) *Client {
 	var protocol string
 
 	if tls {
@@ -34,33 +34,46 @@ func NewClient(host, port string, tls, debug bool) (*Client) {
 		protocol = "http"
 	}
 
-	return &Client{Host: host, Port: port, Protocol: protocol, Debug: debug}
+	return &Client{Host: host, Port: port, Protocol: protocol}
 }
 
 func (c *Client) getUrl() string {
 	return fmt.Sprintf("%v://%v:%v", c.Protocol, c.Host, c.Port)
 }
 
-func (c *Client) doRequest(request *http.Request, responseBody interface{}) error {
-	if c.auth != nil {
-		request.Header.Set("X-Auth-Token", c.auth.token)
+func (c *Client) doRequest(request *http.Request, responseBody interface{}) (headers map[string][]string, cookies map[string]string, err error) {
+	client := &http.Client{
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
+	}
+	response, err := client.Do(request)
+	if err != nil {
+		return
 	}
 
-	response, err := http.DefaultClient.Do(request)
-
-	if err != nil {
-		return err
+	headers = response.Header
+	cookies = make(map[string]string)
+	ck := response.Cookies()
+	for _, v := range ck {
+		cookies[v.Name] = v.Value
 	}
 
 	defer response.Body.Close()
 	bodyBytes, err := ioutil.ReadAll(response.Body)
-
-
-	if response.StatusCode != http.StatusOK {
-		return errors.New("Request error: " + response.Status)
-	}
-
 	if err != nil {
-		return err
+		return
 	}
-	return json.Unmarshal(bodyBytes, responseBody)}
+
+	if response.StatusCode < 200 || response.StatusCode >= 400 {
+		err = errors.New("Request error: " + response.Status)
+		return
+	}
+
+	if response.StatusCode >= 200 && response.StatusCode < 300 {
+		err = json.Unmarshal(bodyBytes, responseBody)
+		return
+	}
+
+	return
+}
