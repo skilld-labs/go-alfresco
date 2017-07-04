@@ -54,18 +54,14 @@ type Site struct {
 }
 
 type Node struct {
-	NumResults int `json:"numResults"`
-	Results    []struct {
-		NodeRef   string `json:"nodeRef"`
-		QNamePath struct {
-			Name         string `json:"name"`
-			PrefixedName string `json:"prefixedName"`
-		} `json:"qnamePath"`
-		Name struct {
-			Name         string `json:"name"`
-			PrefixedName string `json:"prefixedName"`
-		} `json:"name"`
-		ParentNodeRef string `json:"parentNodeRef"`
-	} `json:"results"`
-	SearchElapsedTime int `json:"searchElapsedTime"`
+	NodeRef   string `json:"nodeRef"`
+	QNamePath struct {
+		Name         string `json:"name"`
+		PrefixedName string `json:"prefixedName"`
+	} `json:"qnamePath"`
+	Name struct {
+		Name         string `json:"name"`
+		PrefixedName string `json:"prefixedName"`
+	} `json:"name"`
+	ParentNodeRef string `json:"parentNodeRef"`
 }

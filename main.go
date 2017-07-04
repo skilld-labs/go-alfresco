@@ -13,13 +13,11 @@ func main() {
 	dcfg := docs.Config{
 		Endpoint: "62.210.250.198:8080",
 		Username: "admin",
-		Password: "*****",
+		Password: "*******",
 	}
 
 	test, _ := docs.New(dcfg)
-
 	dapi := docs.NewDAPI(test)
-	//spew.Dump(dapi)
 
 	/*
 	 * -----------------------------
@@ -59,41 +57,52 @@ func main() {
 
 	/*
 	 * -----------------------------
-	 * Test to get a node ID
+	 * Test to get a node ID (string (string to search), bool (is a site), string(site to search))
 	 * For research to be precise you ideally need to use the prefixedName of the node
+	 * For a site:           "documentlibrary", true, "name of the site"
+	 * For a space template: prefixedName, false, ""
+	 * prefixedName : "Your Template" -> "your_template"
 	 * -----------------------------
 	 */
-	node, err := dapi.Client.GetNode("space_templates")
+	/*node, err := dapi.Client.GetNode("documentlibrary", true, "newtest")
 	if err != nil {
 		//spew.Dump(err)
 	} else {
-		spew.Dump(node)
-		//spew.Dump(node.Results[0].NodeRef)
-	}
+		//spew.Dump(node)
+		spew.Dump(node.NodeRef)
+	}*/
 
-	/*folders := []string{"/Custom Template/a/b/c", "/Custom Template/c/d", "/Custom Template/b/z"}
+	/*
+	 * -----------------------------
+	 * Test to create folder template
+	 * -----------------------------
+	 */
+	/*folders := []string{"/test/testouille/testouillage"}
 
-	err = dapi.Client.CreateFolderTemplate(*node, folders)
+	err = dapi.Client.CreateFolderTemplate(node, folders)
 	if err != nil {
 		spew.Dump(err)
 	}*/
 
-	//testing get all users
-	/*users, err := rest.GetUsers(session)
+	/*
+	 * -----------------------------
+	 * Test to get all users
+	 * -----------------------------
+	 */
+	/*users, err := dapi.Client.GetUsers()
 	if err != nil {
 		spew.Dump(err)
 	}
 	spew.Dump(users)*/
 
-	//testing get specific user
-	/*user, err := rest.GetUser(session, "mmeunier")
+	/*
+	 * -----------------------------
+	 * Test to get specific user
+	 * -----------------------------
+	 */
+	/*user, err := dapi.Client.GetUser("admin")
 	if err != nil {
 		spew.Dump(err)
 	}
 	spew.Dump(user)*/
-
-	//........................................|
-	//  testing del all site                  |
-	//  testing del all users -- except admin |
-	//....................................... |
 }

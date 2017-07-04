@@ -3,13 +3,9 @@ package rest
 import (
 	"../api"
 	"bytes"
-	//"fmt"
+	"encoding/json"
 	"net/http"
 	"net/url"
-	//"errors"
-	"encoding/json"
-	//"github.com/davecgh/go-spew/spew"
-	"io/ioutil"
 )
 
 type session struct {
@@ -66,46 +62,32 @@ func (c *Client) Login(cred Credentials, ticketOnly bool) error {
 	return nil
 }
 
-func GetUsers(ticket session) (*Users, error) {
-	apiUrl := "http://62.210.250.198:8080"
-	resource := "/alfresco/s/api/people"
-	client := &http.Client{}
-	req, err := http.NewRequest("GET", apiUrl+resource, nil)
+func (c *Client) GetUsers() (*Users, error) {
+	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/s/api/people", nil)
 	if err != nil {
 		return nil, err
 	}
 	q := req.URL.Query()
-	q.Add("alf_ticket", ticket.AlfTicket)
+	q.Add("alf_ticket", c.auth.AlfTicket)
 	req.URL.RawQuery = q.Encode()
-
-	resp, _ := client.Do(req)
-	bodyBytes, _ := ioutil.ReadAll(resp.Body)
-	u := &Users{}
-	err = json.Unmarshal(bodyBytes, &u)
-	if err != nil {
-		return u, err
+	response := new(Users)
+	if _, _, err = c.doRequest(req, response); err != nil {
+		return response, err
 	}
-	return u, nil
+	return response, nil
 }
 
-func GetUser(ticket session, userName string) (*User, error) {
-	apiUrl := "http://62.210.250.198:8080"
-	resource := "/alfresco/s/api/people/"
-	client := &http.Client{}
-	req, err := http.NewRequest("GET", apiUrl+resource+userName, nil)
+func (c *Client) GetUser(userName string) (*User, error) {
+	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/s/api/people/"+userName, nil)
 	if err != nil {
 		return nil, err
 	}
 	q := req.URL.Query()
-	q.Add("alf_ticket", ticket.AlfTicket)
+	q.Add("alf_ticket", c.auth.AlfTicket)
 	req.URL.RawQuery = q.Encode()
-
-	resp, _ := client.Do(req)
-	bodyBytes, _ := ioutil.ReadAll(resp.Body)
-	u := &User{}
-	err = json.Unmarshal(bodyBytes, &u)
-	if err != nil {
-		return u, err
+	response := new(User)
+	if _, _, err = c.doRequest(req, response); err != nil {
+		return response, err
 	}
-	return u, nil
+	return response, nil
 }

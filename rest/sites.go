@@ -65,7 +65,7 @@ func (c *Client) DeleteSite(shortName string) error {
 
 func (c *Client) CreateFolderTemplate(node Node, paths []string) error {
 	template := FolderTemplate{}
-	template.Destination = node.Results[0].NodeRef
+	template.Destination = node.NodeRef
 	template.Paths = paths
 	jsonVal, _ := json.Marshal(template)
 	req, err := http.NewRequest("POST", c.getUrl()+"/alfresco/s/slingshot/doclib2/mkdir", bytes.NewBufferString(string(jsonVal)))
