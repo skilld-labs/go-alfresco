@@ -13,7 +13,7 @@ func main() {
 	dcfg := docs.Config{
 		Endpoint: "62.210.250.198:8080",
 		Username: "admin",
-		Password: "RT13sk37",
+		Password: "*****",
 	}
 
 	test, _ := docs.New(dcfg)
@@ -63,7 +63,7 @@ func main() {
 	 * For research to be precise you ideally need to use the prefixedName of the node
 	 * -----------------------------
 	 */
-	node, err := dapi.Client.GetNode("custom_template")
+	node, err := dapi.Client.GetNode("space_templates")
 	if err != nil {
 		//spew.Dump(err)
 	} else {
@@ -73,7 +73,7 @@ func main() {
 
 	/*folders := []string{"/Custom Template/a/b/c", "/Custom Template/c/d", "/Custom Template/b/z"}
 
-	err = dapi.Client.CreateSiteTemplate(*node, folders)
+	err = dapi.Client.CreateFolderTemplate(*node, folders)
 	if err != nil {
 		spew.Dump(err)
 	}*/
