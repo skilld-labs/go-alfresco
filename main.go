@@ -1,7 +1,7 @@
 package main
 
 import (
-	//	"./api"
+	//"./api"
 	"./docs"
 	//"./rest"
 	"github.com/davecgh/go-spew/spew"
@@ -18,6 +18,26 @@ func main() {
 
 	test, _ := docs.New(dcfg)
 	dapi := docs.NewDAPI(test)
+	//spew.Dump(dapi)
+
+	/*
+	 * -----------------------------
+	 * Test to create Site
+	 * -----------------------------
+	 */
+
+	/*s := rest.Site{}
+
+	s.SitePreset = "site-dashboard"
+	s.ShortName = "teststruct"
+	s.Title = "teststruct"
+	s.Description = ""
+	s.Visibility = "PRIVATE"
+
+	err := dapi.Client.CreateSite(s)
+	if err != nil {
+		spew.Dump(err)
+	}*/
 
 	/*
 	 * -----------------------------
@@ -64,9 +84,9 @@ func main() {
 	 * prefixedName : "Your Template" -> "your_template"
 	 * -----------------------------
 	 */
-	/*node, err := dapi.Client.GetNode("documentlibrary", true, "newtest")
+	/*node, err := dapi.Client.GetNode("documentlibrary", true, "lebontest")
 	if err != nil {
-		//spew.Dump(err)
+		spew.Dump(err)
 	} else {
 		//spew.Dump(node)
 		spew.Dump(node.NodeRef)
@@ -75,9 +95,11 @@ func main() {
 	/*
 	 * -----------------------------
 	 * Test to create folder template
+	 * Paths should begin with a "/". example : {"/a", "/abc", "/a/b/c"}
+	 * creates 'a' & 'abc' at root, 'b' in 'a' and 'c' in 'b'
 	 * -----------------------------
 	 */
-	/*folders := []string{"/test/testouille/testouillage"}
+	/*folders := []string{"/a", "/b", "/a/abc"}
 
 	err = dapi.Client.CreateFolderTemplate(node, folders)
 	if err != nil {
