@@ -34,7 +34,7 @@ type User struct {
 	IsAdminAuthority    bool   `json:"isAdminAuthority"`
 }
 
-type UserCreditentials struct {
+type UserCredentials struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 }

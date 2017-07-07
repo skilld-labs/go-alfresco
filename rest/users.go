@@ -13,10 +13,7 @@ type session struct {
 	AlfTicket  string `json:"alf_ticket"`
 }
 
-type Credentials struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
+type Credentials api.UserCredentials
 
 type ticket struct {
 	Data struct {
