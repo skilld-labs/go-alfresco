@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/davecgh/go-spew/spew"
 	"io/ioutil"
 	"net/http"
 )
@@ -48,10 +49,14 @@ func (c *Client) doRequest(request *http.Request, responseBody interface{}) (hea
 		},
 	}
 
+	spew.Dump("request content")
+	spew.Dump(request)
 	response, err := client.Do(request)
 	if err != nil {
 		return
 	}
+	spew.Dump("response body")
+	spew.Dump(response.Body)
 
 	headers = response.Header
 	cookies = make(map[string]string)
