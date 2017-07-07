@@ -17,6 +17,7 @@ type NodeRes struct {
 func (c *Client) GetNode(nodeprefix string, isSite bool, siteName string) (Node, error) {
 	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/s/slingshot/node/search", nil)
 	if err != nil {
+		spew.Dump(err)
 		return Node{}, err
 	}
 	q := req.URL.Query()
@@ -28,6 +29,7 @@ func (c *Client) GetNode(nodeprefix string, isSite bool, siteName string) (Node,
 	response := new(NodeRes)
 	req.Header.Set("Content-Type", "application/json")
 	if _, _, err = c.doRequest(req, response); err != nil {
+		spew.Dump(err)
 		return response.Results[0], err
 	}
 	if isSite && siteName != "" {
