@@ -1,8 +1,8 @@
 package rest
 
 import (
-	"../api"
 	"github.com/davecgh/go-spew/spew"
+	"github.com/skilld-labs/go-alfresco/api"
 	"net/http"
 	"strings"
 )

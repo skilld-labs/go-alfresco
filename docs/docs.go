@@ -1,7 +1,7 @@
 package docs
 
 import (
-	"../rest"
+	"github.com/skilld-labs/go-alfresco/rest"
 	"strings"
 )
 

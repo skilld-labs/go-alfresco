@@ -1,11 +1,8 @@
 package main
 
 import (
-	//"./api"
-	"./docs"
-	//"./rest"
 	"github.com/davecgh/go-spew/spew"
-	//"strings"
+	"github.com/skilld-labs/go-alfresco/docs"
 )
 
 func main() {

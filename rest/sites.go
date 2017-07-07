@@ -1,9 +1,9 @@
 package rest
 
 import (
-	"../api"
 	"bytes"
 	"encoding/json"
+	"github.com/skilld-labs/go-alfresco/api"
 	"net/http"
 )
 
