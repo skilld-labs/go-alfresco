@@ -10,7 +10,7 @@ func main() {
 	dcfg := docs.Config{
 		Endpoint: "62.210.250.198:8080",
 		Username: "admin",
-		Password: "*******",
+		Password: "******",
 	}
 
 	test, _ := docs.New(dcfg)
@@ -81,12 +81,12 @@ func main() {
 	 * prefixedName : "Your Template" -> "your_template"
 	 * -----------------------------
 	 */
-	/*node, err := dapi.Client.GetNode("documentlibrary", true, "lebontest")
+	/*node, err := dapi.Client.GetNode("documentlibrary", true, "supersite")
 	if err != nil {
 		spew.Dump(err)
 	} else {
-		//spew.Dump(node)
-		spew.Dump(node.NodeRef)
+		spew.Dump(node)
+		//spew.Dump(node.NodeRef)
 	}*/
 
 	/*
@@ -96,7 +96,7 @@ func main() {
 	 * creates 'a' & 'abc' at root, 'b' in 'a' and 'c' in 'b'
 	 * -----------------------------
 	 */
-	/*folders := []string{"/a", "/b", "/a/abc"}
+	/*folders := []string{"/lala", "/alal", "/lala/lulu"}
 
 	err = dapi.Client.CreateFolderTemplate(node, folders)
 	if err != nil {

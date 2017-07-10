@@ -34,15 +34,15 @@ func (c *Client) GetNode(nodeprefix string, isSite bool, siteName string) (Node,
 	}
 	if isSite && siteName != "" {
 		for _, v := range response.Results {
-			if strings.Contains(v.QNamePath.PrefixedName, siteName) {
-				spew.Dump(v)
+			if strings.Contains(v.QNamePath.Name, siteName) {
+				//spew.Dump(v)
 				return v, nil
 			}
 		}
 	} else {
 		for _, v := range response.Results {
 			if strings.Contains(v.QNamePath.PrefixedName, "dictionary") {
-				spew.Dump(v)
+				//spew.Dump(v)
 				return v, nil
 			}
 		}
