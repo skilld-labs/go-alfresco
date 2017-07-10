@@ -26,6 +26,10 @@ type Folder struct {
 	Name string `json:"name"`
 }
 
+type CreateSiteResponse struct {
+	Success bool `json:"success"`
+}
+
 func (c *Client) GetSites() (*Sites, error) {
 	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/s/api/sites", nil)
 	if err != nil {
@@ -79,7 +83,8 @@ func (c *Client) CreateSite(site Site) error {
 	ck := http.Cookie{Name: "JSESSIONID", Value: c.auth.JsessionID}
 	req.AddCookie(&ck)
 	req.Header.Set("Content-Type", "application/json")
-	if _, _, err := c.doRequest(req, nil); err != nil {
+	response := new(CreateSiteResponse)
+	if _, _, err := c.doRequest(req, response); err != nil {
 		return err
 	}
 	return nil
