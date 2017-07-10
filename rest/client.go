@@ -51,7 +51,7 @@ func (c *Client) doRequest(request *http.Request, responseBody interface{}) (hea
 
 	spew.Dump("request content")
 	spew.Dump(request)
-	response, err := client.Do(request.Body)
+	response, err := client.Do(request)
 	if err != nil {
 		return
 	}
