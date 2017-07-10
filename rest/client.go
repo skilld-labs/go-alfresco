@@ -55,8 +55,8 @@ func (c *Client) doRequest(request *http.Request, responseBody interface{}) (hea
 	if err != nil {
 		return
 	}
-	spew.Dump("response body")
-	spew.Dump(response.Body)
+	//spew.Dump("response body")
+	//spew.Dump(response.Body)
 
 	headers = response.Header
 	cookies = make(map[string]string)
@@ -77,6 +77,8 @@ func (c *Client) doRequest(request *http.Request, responseBody interface{}) (hea
 	}
 
 	if response.StatusCode >= 200 && response.StatusCode < 300 {
+		spew.Dump("BodyBytes content")
+		spew.Dump(bodyBytes)
 		err = json.Unmarshal(bodyBytes, responseBody)
 		return
 	}
