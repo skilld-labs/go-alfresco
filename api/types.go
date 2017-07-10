@@ -40,16 +40,16 @@ type UserCredentials struct {
 }
 
 type Site struct {
-	Url             string   `json:"url"`
+	Url             string   `json:"url,omitempty"`
 	SitePreset      string   `json:"sitePreset"`
 	ShortName       string   `json:"shortName"`
 	Title           string   `json:"title"`
 	Description     string   `json:"description"`
-	Node            string   `json:"node"`
-	TagScope        string   `json:"tagScope"`
-	SiteManagers    []string `json:"siteManagers"`
-	IsMemberOfGroup bool     `json:"isMemberOfGroup"`
-	IsPublic        bool     `json:"isPublic"`
+	Node            string   `json:"node,omitempty"`
+	TagScope        string   `json:"tagScope,omitempty"`
+	SiteManagers    []string `json:"siteManagers,omitempty"`
+	IsMemberOfGroup bool     `json:"isMemberOfGroup,omitempty"`
+	IsPublic        bool     `json:"isPublic,omitempty"`
 	Visibility      string   `json:"visibility"`
 }
 
