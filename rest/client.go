@@ -1,10 +1,10 @@
 package rest
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/davecgh/go-spew/spew"
 	"io/ioutil"
 	"net/http"
 )
@@ -13,28 +13,24 @@ type Client struct {
 	Protocol string
 	Host     string
 	Port     string
-	auth     *authInfo
+	session  *session
 }
 
-type authInfo struct {
+type session struct {
 	JsessionID string
 	AlfTicket  string
-}
-
-type statusResponse struct {
-	Status  string `json:"status"`
-	Message string `json:"message"`
+	Basic      string
+	Auth       struct {
+		Username string
+		Password string
+	}
 }
 
 func NewClient(host string, port string, tls bool) *Client {
-	var protocol string
-
+	protocol := "http"
 	if tls {
 		protocol = "https"
-	} else {
-		protocol = "http"
 	}
-
 	return &Client{Host: host, Port: port, Protocol: protocol}
 }
 
@@ -42,44 +38,48 @@ func (c *Client) getUrl() string {
 	return fmt.Sprintf("%v://%v:%v", c.Protocol, c.Host, c.Port)
 }
 
-func (c *Client) doRequest(request *http.Request, responseBody interface{}) (headers map[string][]string, cookies map[string]string, err error) {
+func (c *Client) doRequest(request *http.Request, response interface{}) (headers map[string][]string, cookies map[string]string, err error) {
 	client := &http.Client{
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
 			return http.ErrUseLastResponse
 		},
 	}
-
-	spew.Dump("request content")
-	spew.Dump(request)
-	response, err := client.Do(request)
+	// Pass authentication methods to request
+	basicAuth := base64.StdEncoding.EncodeToString([]byte(c.session.Auth.Username + ":" + c.session.Auth.Password))
+	jsessionId := http.Cookie{Name: "JSESSIONID", Value: c.session.JsessionID}
+	request.AddCookie(&jsessionId)
+	request.Header.Set("Authorization", "Basic "+basicAuth)
+	q := request.URL.Query()
+	q.Add("alf_ticket", c.session.AlfTicket)
+	request.URL.RawQuery = q.Encode()
+	r, err := client.Do(request)
 	if err != nil {
 		return
 	}
-	//spew.Dump("response body")
-	//spew.Dump(response.Body)
 
-	headers = response.Header
+	headers = r.Header
 	cookies = make(map[string]string)
-	ck := response.Cookies()
+	ck := r.Cookies()
 	for _, v := range ck {
 		cookies[v.Name] = v.Value
 	}
-
-	defer response.Body.Close()
-	bodyBytes, err := ioutil.ReadAll(response.Body)
+	defer r.Body.Close()
+	bodyBytes, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		return
 	}
 
-	if response.StatusCode < 200 || response.StatusCode >= 400 {
-		err = errors.New("Request error: " + response.Status)
+	if r.StatusCode < 200 || r.StatusCode >= 400 {
+		err = errors.New("Request error: " + r.Status)
 		return
 	}
 
-	if response.StatusCode >= 200 && response.StatusCode < 300 {
-		spew.Dump("BodyBytes content")
-		spew.Dump(bodyBytes)
-		err = json.Unmarshal(bodyBytes, responseBody)
+	if r.StatusCode >= 200 && r.StatusCode < 300 {
+		if response != nil {
+			err = json.Unmarshal(bodyBytes, response)
+		} else {
+			err = nil
+		}
 		return
 	}
 

@@ -1,4 +1,4 @@
-package api
+package rest
 
 type User struct {
 	Url                 string `json:"url"`
@@ -34,11 +34,6 @@ type User struct {
 	IsAdminAuthority    bool   `json:"isAdminAuthority"`
 }
 
-type UserCredentials struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
-
 type Site struct {
 	Url             string   `json:"url,omitempty"`
 	SitePreset      string   `json:"sitePreset"`
@@ -54,14 +49,24 @@ type Site struct {
 }
 
 type Node struct {
-	NodeRef   string `json:"nodeRef"`
-	QNamePath struct {
-		Name         string `json:"name"`
-		PrefixedName string `json:"prefixedName"`
-	} `json:"qnamePath"`
-	Name struct {
-		Name         string `json:"name"`
-		PrefixedName string `json:"prefixedName"`
-	} `json:"name"`
-	ParentNodeRef string `json:"parentNodeRef"`
+	CreatedAt string `json:"createdAt"`
+	IsFolder  bool   `json:"isFolder"`
+	Search    struct {
+		Score float64 `json:"score"`
+	} `json:"search"`
+	IsFile        bool `json:"isFile"`
+	CreatedByUser struct {
+		Id          string `json:"id"`
+		DisplayName string `json:"displayName"`
+	} `json:"createdByUser"`
+	ModifiedAt     string `json:"modifiedAt"`
+	ModifiedByUser struct {
+		Id          string `json:"id"`
+		DisplayName string `json:"id"`
+	} `json:"modifiedByUser"`
+	Name     string `json:"name"`
+	Location string `json:"location"`
+	Id       string `json:"id"`
+	NodeType string `json:"nodeType"`
+	ParentId string `json:"parentId"`
 }

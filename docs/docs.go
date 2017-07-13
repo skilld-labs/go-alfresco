@@ -1,7 +1,7 @@
 package docs
 
 import (
-	"github.com/skilld-labs/go-alfresco/rest"
+	"../rest"
 	"strings"
 )
 
@@ -18,7 +18,7 @@ type DAPI struct {
 func New(cfg Config) (*rest.Client, error) {
 	var endpoint = strings.Split(cfg.Endpoint, ":")
 	client := rest.NewClient(endpoint[0], endpoint[1], false)
-	return client, client.Login(rest.Credentials{Username: cfg.Username, Password: cfg.Password}, false)
+	return client, client.Login(cfg.Username, cfg.Password, false)
 }
 
 func NewDAPI(c *rest.Client) DAPI {

@@ -1,51 +1,68 @@
 package rest
 
 import (
-	"github.com/davecgh/go-spew/spew"
-	"github.com/skilld-labs/go-alfresco/api"
+	"bytes"
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 )
 
-type Node api.Node
 type NodeRes struct {
-	NumResults        int    `json:"numResults"`
-	Results           []Node `json:"results"`
-	SearchElapsedTime int    `json:"searchElapsedTime"`
+	List struct {
+		Pagination struct {
+			Count        int  `json:"count"`
+			HasMoreItems bool `json:"hasMoreItems"`
+			TotalItems   int  `json:"totalItems"`
+			SkipCount    int  `json:"skipCount"`
+			MaxItems     int  `json:"maxItems"`
+		} `json:"pagination"`
+		Context struct {
+			Consistency struct {
+				LastTxId int `json:"lastTxId"`
+			} `json:"consistency"`
+		} `json:"context"`
+		Entries []struct {
+			Entry Node `json:"entry"`
+		} `json:"entries"`
+	} `json:"list"`
 }
 
-func (c *Client) GetNode(nodeprefix string, isSite bool, siteName string) (Node, error) {
-	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/s/slingshot/node/search", nil)
+type SearchQuery struct {
+	Query struct {
+		Language string `json:"language"`
+		Query    string `json:"query"`
+	} `json:"query"`
+	Paging struct {
+		MaxItems  int `json:"maxItems"`
+		SkipCount int `json:"skipCount"`
+	} `json:"paging"`
+}
+
+func (c *Client) GetNode(query SearchQuery) (Node, error) {
+	jsonVal, _ := json.Marshal(query)
+	req, err := http.NewRequest("POST", c.getUrl()+"/alfresco/api/-default-/public/search/versions/1/search", bytes.NewBufferString(string(jsonVal)))
 	if err != nil {
-		spew.Dump(err)
 		return Node{}, err
 	}
-	q := req.URL.Query()
-	q.Add("alf_ticket", c.auth.AlfTicket)
-	q.Add("q", "@name:"+nodeprefix)
-	q.Add("store", "workspace://SpacesStore")
-	q.Add("lang", "lucene")
-	req.URL.RawQuery = q.Encode()
-	response := new(NodeRes)
 	req.Header.Set("Content-Type", "application/json")
-	if _, _, err = c.doRequest(req, response); err != nil {
-		spew.Dump(err)
-		return response.Results[0], err
+	req.Header.Set("Accept", "application/json")
+	response := new(NodeRes)
+	if _, _, err := c.doRequest(req, response); err != nil {
+		return Node{}, err
 	}
-	if isSite && siteName != "" {
-		for _, v := range response.Results {
-			if strings.Contains(v.QNamePath.Name, siteName) {
-				//spew.Dump(v)
-				return v, nil
-			}
-		}
-	} else {
-		for _, v := range response.Results {
-			if strings.Contains(v.QNamePath.PrefixedName, "dictionary") {
-				//spew.Dump(v)
-				return v, nil
-			}
-		}
+	return response.List.Entries[0].Entry, nil
+}
+
+func (c *Client) CreateFolderTemplate(node Node, paths []string) error {
+	nodePath := "workspace://SpacesStore/" + node.Id
+	req, err := http.NewRequest("POST", c.getUrl()+"/alfresco/s/slingshot/doclib2/mkdir", bytes.NewBufferString(fmt.Sprintf(`{"destination":"%s","paths":[%s]}`, nodePath, `"`+strings.Join(paths, `","`)+`"`)))
+	if err != nil {
+		return err
 	}
-	return response.Results[0], nil
+	req.Header.Set("Content-Type", "application/json")
+	if _, _, err := c.doRequest(req, nil); err != nil {
+		return err
+	}
+	return nil
 }

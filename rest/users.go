@@ -2,18 +2,11 @@ package rest
 
 import (
 	"bytes"
-	"encoding/json"
-	"github.com/skilld-labs/go-alfresco/api"
+	"encoding/base64"
+	"fmt"
 	"net/http"
 	"net/url"
 )
-
-type session struct {
-	JsessionId string `json:"jsessionid"`
-	AlfTicket  string `json:"alf_ticket"`
-}
-
-type Credentials api.UserCredentials
 
 type ticket struct {
 	Data struct {
@@ -22,19 +15,14 @@ type ticket struct {
 }
 
 type Users struct {
-	Users []api.User `json:"people"`
+	Users []User `json:"people"`
 }
 
-type User api.User
-
-func (c *Client) Login(cred Credentials, ticketOnly bool) error {
-	c.auth = &authInfo{}
-	data := url.Values{}
-	data.Set("username", cred.Username)
-	data.Add("password", cred.Password)
-	val := Credentials{cred.Username, cred.Password}
-	jsonVal, _ := json.Marshal(val)
-
+func (c *Client) Login(username string, password string, ticketOnly bool) error {
+	c.session = &session{}
+	c.session.Auth.Username = username
+	c.session.Auth.Password = password
+	data := url.Values{"username": {c.session.Auth.Username}, "password": {c.session.Auth.Password}}
 	if !ticketOnly {
 		var cookies map[string]string
 		r, _ := http.NewRequest("POST", c.getUrl()+"/share/page/dologin", bytes.NewBufferString(data.Encode()))
@@ -44,17 +32,17 @@ func (c *Client) Login(cred Credentials, ticketOnly bool) error {
 			return err
 		}
 		if s, exists := cookies["JSESSIONID"]; exists {
-			c.auth.JsessionID = s
+			c.session.JsessionID = s
 		}
 	}
-
-	req, _ := http.NewRequest("POST", c.getUrl()+"/alfresco/s/api/login", bytes.NewBufferString(string(jsonVal)))
+	req, _ := http.NewRequest("POST", c.getUrl()+"/alfresco/s/api/login", bytes.NewBufferString(fmt.Sprintf(`{"username":"%s","password":"%s"}`, c.session.Auth.Username, c.session.Auth.Password)))
 	req.Header.Set("Content-Type", "application/json")
 	response := new(ticket)
 	if _, _, err := c.doRequest(req, response); err != nil {
 		return err
 	}
-	c.auth.AlfTicket = response.Data.Ticket
+	c.session.AlfTicket = response.Data.Ticket
+	c.session.Basic = "Basic " + base64.StdEncoding.EncodeToString([]byte(c.session.Auth.Username+":"+c.session.Auth.Password))
 
 	return nil
 }
@@ -64,9 +52,6 @@ func (c *Client) GetUsers() (*Users, error) {
 	if err != nil {
 		return nil, err
 	}
-	q := req.URL.Query()
-	q.Add("alf_ticket", c.auth.AlfTicket)
-	req.URL.RawQuery = q.Encode()
 	response := new(Users)
 	if _, _, err = c.doRequest(req, response); err != nil {
 		return response, err
@@ -79,9 +64,6 @@ func (c *Client) GetUser(userName string) (*User, error) {
 	if err != nil {
 		return nil, err
 	}
-	q := req.URL.Query()
-	q.Add("alf_ticket", c.auth.AlfTicket)
-	req.URL.RawQuery = q.Encode()
 	response := new(User)
 	if _, _, err = c.doRequest(req, response); err != nil {
 		return response, err

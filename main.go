@@ -3,19 +3,20 @@ package main
 import (
 	"github.com/davecgh/go-spew/spew"
 	"github.com/skilld-labs/go-alfresco/docs"
+	"github.com/skilld-labs/go-alfresco/rest"
 )
 
 func main() {
 
 	dcfg := docs.Config{
-		Endpoint: "62.210.250.198:8080",
-		Username: "admin",
-		Password: "******",
+		Endpoint: "*****",
+		Username: "*****",
+		Password: "*****",
 	}
 
 	test, _ := docs.New(dcfg)
 	dapi := docs.NewDAPI(test)
-	//spew.Dump(dapi)
+	spew.Dump(dapi)
 
 	/*
 	 * -----------------------------
@@ -26,8 +27,8 @@ func main() {
 	/*s := rest.Site{}
 
 	s.SitePreset = "site-dashboard"
-	s.ShortName = "teststruct"
-	s.Title = "teststruct"
+	s.ShortName = "useless"
+	s.Title = "useless"
 	s.Description = ""
 	s.Visibility = "PRIVATE"
 
@@ -55,7 +56,7 @@ func main() {
 	 * -----------------------------
 	 */
 
-	/*site, err := dapi.Client.GetSite("testsite")
+	/*site, err := dapi.Client.GetSite("useless")
 	if err != nil {
 		spew.Dump(err)
 	} else {
@@ -67,7 +68,7 @@ func main() {
 	 * Test to delete site (ShortName in parameter)
 	 * -----------------------------
 	 */
-	/*err := dapi.Client.DeleteSite("testsite")
+	/*err := dapi.Client.DeleteSite("cuntest")
 	if err != nil {
 		spew.Dump(err)
 	}*/
@@ -81,27 +82,42 @@ func main() {
 	 * prefixedName : "Your Template" -> "your_template"
 	 * -----------------------------
 	 */
-	/*node, err := dapi.Client.GetNode("documentlibrary", true, "supersite")
+	/*node, err := dapi.Client.GetNode("mmeunier")
 	if err != nil {
 		spew.Dump(err)
 	} else {
 		spew.Dump(node)
-		//spew.Dump(node.NodeRef)
 	}*/
+
+	/* NEW TEST FOR GETTING NODE */
+
+	q := rest.SearchQuery{}
+	q.Query.Language = "lucene"
+	q.Query.Query = `TYPE:"st:site" AND @cm\:name:"useless"`
+	q.Paging.MaxItems = 5
+	q.Paging.SkipCount = 0
+
+	node, err := dapi.Client.GetNode(q)
+	if err != nil {
+		spew.Dump(err)
+	} else {
+		//spew.Dump(node.Id)
+		spew.Dump(node)
+	}
 
 	/*
 	 * -----------------------------
 	 * Test to create folder template
-	 * Paths should begin with a "/". example : {"/a", "/abc", "/a/b/c"}
+	 * Paths should begin with a "/".example : {"/a", "/abc", "/a/b/c"}
 	 * creates 'a' & 'abc' at root, 'b' in 'a' and 'c' in 'b'
 	 * -----------------------------
 	 */
-	/*folders := []string{"/lala", "/alal", "/lala/lulu"}
+	folders := []string{"/documentlibrary/lulu", "/documentlibrary/elele", "/documentlibrary/lala/lulu"}
 
 	err = dapi.Client.CreateFolderTemplate(node, folders)
 	if err != nil {
 		spew.Dump(err)
-	}*/
+	}
 
 	/*
 	 * -----------------------------
@@ -112,14 +128,14 @@ func main() {
 	if err != nil {
 		spew.Dump(err)
 	}
-	spew.Dump(users)*/
-
+	spew.Dump(users)
+	*/
 	/*
 	 * -----------------------------
 	 * Test to get specific user
 	 * -----------------------------
 	 */
-	/*user, err := dapi.Client.GetUser("admin")
+	/*user, err := dapi.Client.GetUser("mmeunier")
 	if err != nil {
 		spew.Dump(err)
 	}
