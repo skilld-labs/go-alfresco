@@ -82,16 +82,8 @@ func main() {
 	 * prefixedName : "Your Template" -> "your_template"
 	 * -----------------------------
 	 */
-	/*node, err := dapi.Client.GetNode("mmeunier")
-	if err != nil {
-		spew.Dump(err)
-	} else {
-		spew.Dump(node)
-	}*/
 
-	/* NEW TEST FOR GETTING NODE */
-
-	q := rest.SearchQuery{}
+	/*q := rest.SearchQuery{}
 	q.Query.Language = "lucene"
 	q.Query.Query = `TYPE:"st:site" AND @cm\:name:"useless"`
 	q.Paging.MaxItems = 5
@@ -103,7 +95,7 @@ func main() {
 	} else {
 		//spew.Dump(node.Id)
 		spew.Dump(node)
-	}
+	}*/
 
 	/*
 	 * -----------------------------
@@ -112,12 +104,12 @@ func main() {
 	 * creates 'a' & 'abc' at root, 'b' in 'a' and 'c' in 'b'
 	 * -----------------------------
 	 */
-	folders := []string{"/documentlibrary/lulu", "/documentlibrary/elele", "/documentlibrary/lala/lulu"}
+	/*folders := []string{"/documentlibrary/lulu", "/documentlibrary/elele", "/documentlibrary/lala/lulu"}
 
 	err = dapi.Client.CreateFolderTemplate(node, folders)
 	if err != nil {
 		spew.Dump(err)
-	}
+	}*/
 
 	/*
 	 * -----------------------------
