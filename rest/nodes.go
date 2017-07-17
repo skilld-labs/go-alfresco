@@ -31,7 +31,7 @@ type NodeRes struct {
 type SearchQuery struct {
 	Query struct {
 		Language string `json:"language"`
-		Query    string `json:"query"`
+		String   string `json:"query"`
 	} `json:"query"`
 	Paging struct {
 		MaxItems  int `json:"maxItems"`
