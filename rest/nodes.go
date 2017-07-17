@@ -52,6 +52,7 @@ func (c *Client) GetNode(query SearchQuery) (Node, error) {
 		return Node{}, err
 	}
 	for len(response.List.Entries) < 1 {
+		c.GetSites()
 		c.GetNode(query)
 	}
 	return response.List.Entries[0].Entry, nil
