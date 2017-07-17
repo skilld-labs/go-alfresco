@@ -1,17 +1,17 @@
 package main
 
 import (
+	"./docs"
+	"./rest"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/skilld-labs/go-alfresco/docs"
-	"github.com/skilld-labs/go-alfresco/rest"
 )
 
 func main() {
 
 	dcfg := docs.Config{
-		Endpoint: "*****",
-		Username: "*****",
-		Password: "*****",
+		Endpoint: "***",
+		Username: "***",
+		Password: "***",
 	}
 
 	test, _ := docs.New(dcfg)
@@ -27,8 +27,8 @@ func main() {
 	/*s := rest.Site{}
 
 	s.SitePreset = "site-dashboard"
-	s.ShortName = "useless"
-	s.Title = "useless"
+	s.ShortName = "gutgut"
+	s.Title = "gutgut"
 	s.Description = ""
 	s.Visibility = "PRIVATE"
 
@@ -56,7 +56,7 @@ func main() {
 	 * -----------------------------
 	 */
 
-	/*site, err := dapi.Client.GetSite("useless")
+	/*site, err := dapi.Client.GetSite("gutgut")
 	if err != nil {
 		spew.Dump(err)
 	} else {
@@ -85,7 +85,7 @@ func main() {
 
 	/*q := rest.SearchQuery{}
 	q.Query.Language = "lucene"
-	q.Query.Query = `TYPE:"st:site" AND @cm\:name:"useless"`
+	q.Query.String = `TYPE:"st:site" AND @cm\:name:"gutgut"`
 	q.Paging.MaxItems = 5
 	q.Paging.SkipCount = 0
 

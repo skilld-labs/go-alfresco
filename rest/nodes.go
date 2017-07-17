@@ -51,6 +51,9 @@ func (c *Client) GetNode(query SearchQuery) (Node, error) {
 	if _, _, err := c.doRequest(req, response); err != nil {
 		return Node{}, err
 	}
+	for len(response.List.Entries) < 1 {
+		c.GetNode(query)
+	}
 	return response.List.Entries[0].Entry, nil
 }
 
