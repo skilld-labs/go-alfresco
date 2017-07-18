@@ -1,11 +1,9 @@
 package rest
 
 import (
-	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/davecgh/go-spew/spew"
 	"io/ioutil"
 	"net/http"
 )
@@ -18,10 +16,8 @@ type Client struct {
 }
 
 type session struct {
-	JsessionID string
-	AlfTicket  string
-	Basic      string
-	Auth       struct {
+	AlfTicket string
+	Auth      struct {
 		Username string
 		Password string
 	}
@@ -45,22 +41,15 @@ func (c *Client) doRequest(request *http.Request, response interface{}) (headers
 			return http.ErrUseLastResponse
 		},
 	}
-	// Pass authentication methods to request
-	basicAuth := base64.StdEncoding.EncodeToString([]byte(c.session.Auth.Username + ":" + c.session.Auth.Password))
-	jsessionId := http.Cookie{Name: "JSESSIONID", Value: c.session.JsessionID}
-	request.AddCookie(&jsessionId)
-	request.Header.Set("Authorization", "Basic "+basicAuth)
+
 	q := request.URL.Query()
 	q.Add("alf_ticket", c.session.AlfTicket)
 	request.URL.RawQuery = q.Encode()
-	spew.Dump("/////////////-----------------REQUEST--------------////////////")
-	spew.Dump(request)
+
 	r, err := client.Do(request)
 	if err != nil {
 		return
 	}
-	spew.Dump("/////////////-----------------RESPONSE--------------////////////")
-	spew.Dump(r)
 
 	headers = r.Header
 	cookies = make(map[string]string)

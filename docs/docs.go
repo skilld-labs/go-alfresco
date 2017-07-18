@@ -18,7 +18,7 @@ type DAPI struct {
 func New(cfg Config) (*rest.Client, error) {
 	var endpoint = strings.Split(cfg.Endpoint, ":")
 	client := rest.NewClient(endpoint[0], endpoint[1], false)
-	return client, client.Login(cfg.Username, cfg.Password, false)
+	return client, client.Login(cfg.Username, cfg.Password)
 }
 
 func NewDAPI(c *rest.Client) DAPI {

@@ -39,7 +39,8 @@ type SearchQuery struct {
 	} `json:"paging"`
 }
 
-func (c *Client) GetNode(query SearchQuery) (Node, error) {
+//Got to rework this function
+/*func (c *Client) GetNode(query SearchQuery) (Node, error) {
 	jsonVal, _ := json.Marshal(query)
 	req, err := http.NewRequest("POST", c.getUrl()+"/alfresco/api/-default-/public/search/versions/1/search", bytes.NewBufferString(string(jsonVal)))
 	if err != nil {
@@ -51,15 +52,11 @@ func (c *Client) GetNode(query SearchQuery) (Node, error) {
 	if _, _, err := c.doRequest(req, response); err != nil {
 		return Node{}, err
 	}
-	for len(response.List.Entries) < 1 {
-		c.GetSites()
-		c.GetNode(query)
-	}
 	return response.List.Entries[0].Entry, nil
-}
+}*/
 
-func (c *Client) CreateFolderTemplate(node Node, paths []string) error {
-	nodePath := "workspace://SpacesStore/" + node.Id
+func (c *Client) CreateFolderTemplate(nodeId string, paths []string) error {
+	nodePath := "workspace://SpacesStore/" + nodeId
 	req, err := http.NewRequest("POST", c.getUrl()+"/alfresco/s/slingshot/doclib2/mkdir", bytes.NewBufferString(fmt.Sprintf(`{"destination":"%s","paths":[%s]}`, nodePath, `"`+strings.Join(paths, `","`)+`"`)))
 	if err != nil {
 		return err

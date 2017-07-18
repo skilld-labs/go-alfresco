@@ -1,43 +1,42 @@
 package rest
 
 type User struct {
-	Url                 string `json:"url"`
-	UserName            string `json:"userName"`
-	Enabled             bool   `json:"enabled"`
-	FirstName           string `json:"firstName"`
-	LastName            string `json:"lastName"`
-	Jobtitle            string `json:"jobtitle"`
-	Organization        string `json:"organization"`
-	OrganizationId      string `json:"organizationId"`
-	Location            string `json:"location"`
-	Telephone           string `json:"telephone"`
-	Mobile              string `json:"mobile"`
-	Email               string `json:"email"`
-	CompanyAddress1     string `json:"companyaddress1"`
-	CompanyAddress2     string `json:"companyaddress2"`
-	CompanyAddress3     string `json:"companyaddress3"`
-	CompanyPostCode     string `json:"companypostcode"`
-	CompanyTelephone    string `json:"companytelephone"`
-	CompanyFax          string `json:"companyfax"`
-	CompanyEmail        string `json:"companyemail"`
-	Skype               string `json:"skype"`
-	InstantMsg          string `json:"instantmsg"`
-	UserStatus          string `json:"userStatus"`
-	UserStatusTime      string `json:"userStatusTime"`
-	GoogleUsername      string `json:"googleusername"`
-	Quota               int    `json:"quota"`
-	SizeCurrent         int    `json:"sizeCurrent"`
-	EmailFeedDisabled   bool   `json:"emailFeedDisabled"`
-	PersonDescription   string `json:"persondescription"`
-	AuthorizationStatus string `json:"authorizationStatus"`
-	IsDeleted           bool   `json:"isDeleted"`
-	IsAdminAuthority    bool   `json:"isAdminAuthority"`
+	Id                        string   `json:"id"`
+	Enabled                   bool     `json:"enabled"`
+	FirstName                 string   `json:"firstName"`
+	LastName                  string   `json:"lastName"`
+	Jobtitle                  string   `json:"jobtId"`
+	AvatarId                  string   `json:"avatarId"`
+	Location                  string   `json:"location"`
+	Telephone                 string   `json:"telephone"`
+	Mobile                    string   `json:"mobile"`
+	Email                     string   `json:"email"`
+	SkypeId                   string   `json:"skypeId"`
+	InstantMsgId              string   `json:"instantMessageId"`
+	UserStatus                string   `json:"userStatus"`
+	StatusUpdatedAt           string   `json:"statusUpdatedAt"`
+	GoogleId                  string   `json:"googleId"`
+	EmailNotificationsEnabled bool     `json:"emailNotificationsEnabled"`
+	Description               string   `json:"description"`
+	AspectNames               []string `json:"aspectNames"`
+	Company                   struct {
+		Organization string `json:"organization"`
+		Address1     string `json:"address1"`
+		Address2     string `json:"address2"`
+		Address3     string `json:"address3"`
+		PostCode     string `json:"postcode"`
+		Telephone    string `json:"telephone"`
+		Fax          string `json:"fax"`
+		Email        string `json:"email"`
+	} `json:"company"`
 }
 
 type Site struct {
+	Id              string   `json:"id,omitempty"`
+	Guid            string   `json:"guid,omitempty"`
 	Url             string   `json:"url,omitempty"`
-	SitePreset      string   `json:"sitePreset"`
-	ShortName       string   `json:"shortName"`
+	SitePreset      string   `json:"sitePreset,omitempty"`
+	ShortName       string   `json:"shortName,omitempty"`
 	Title           string   `json:"title"`
 	Description     string   `json:"description"`
 	Node            string   `json:"node,omitempty"`

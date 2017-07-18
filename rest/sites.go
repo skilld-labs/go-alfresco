@@ -7,33 +7,48 @@ import (
 )
 
 type Sites []Site
+type SiteRes struct {
+	Entry Site `json:"entry"`
+}
+type SitesRes struct {
+	List struct {
+		Pagination struct {
+			Count        int  `json:"count"`
+			HasMoreItems bool `json:"hasMoreItems"`
+			TotalItems   int  `json:"totalItems"`
+			SkipCount    int  `json:"skipCount"`
+			MaxItems     int  `json:"maxItems"`
+		} `json:"pagination"`
+		Entries []SiteRes `json:"entries"`
+	} `json:"list"`
+}
 
-func (c *Client) GetSites() (*Sites, error) {
-	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/s/api/sites", nil)
+func (c *Client) GetSites() (*SitesRes, error) {
+	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites", nil)
 	if err != nil {
-		return nil, err
+		return &SitesRes{}, err
 	}
-	response := new(Sites)
+	response := new(SitesRes)
 	if _, _, err = c.doRequest(req, response); err != nil {
-		return response, err
+		return &SitesRes{}, err
 	}
 	return response, nil
 }
 
-func (c *Client) GetSite(shortName string) (*Site, error) {
-	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/s/api/sites/"+shortName, nil)
+func (c *Client) GetSite(shortName string) (Site, error) {
+	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+shortName, nil)
 	if err != nil {
-		return nil, err
+		return Site{}, err
 	}
-	response := new(Site)
+	response := new(SiteRes)
 	if _, _, err = c.doRequest(req, response); err != nil {
-		return response, err
+		return Site{}, err
 	}
-	return response, nil
+	return response.Entry, nil
 }
 
 func (c *Client) DeleteSite(shortName string) error {
-	req, err := http.NewRequest("DELETE", c.getUrl()+"/alfresco/s/api/sites/"+shortName, nil)
+	req, err := http.NewRequest("DELETE", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+shortName, nil)
 	if err != nil {
 		return err
 	}
@@ -43,15 +58,16 @@ func (c *Client) DeleteSite(shortName string) error {
 	return nil
 }
 
-func (c *Client) CreateSite(site Site) error {
+func (c *Client) CreateSite(site Site) (*SiteRes, error) {
 	jsonVal, _ := json.Marshal(site)
-	req, err := http.NewRequest("POST", c.getUrl()+"/share/page/modules/create-site", bytes.NewBufferString(string(jsonVal)))
+	req, err := http.NewRequest("POST", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites", bytes.NewBufferString(string(jsonVal)))
 	if err != nil {
-		return err
+		return &SiteRes{}, err
 	}
-	req.Header.Set("Content-Type", "application/json")
-	if _, _, err := c.doRequest(req, nil); err != nil {
-		return err
+	req.Header.Set("Accept", "application/json")
+	response := &SiteRes{}
+	if _, _, err := c.doRequest(req, response); err != nil {
+		return &SiteRes{}, err
 	}
-	return nil
+	return response, nil
 }
