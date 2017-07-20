@@ -2,7 +2,7 @@ package main
 
 import (
 	"./docs"
-	"./rest"
+	//"./rest"
 	"github.com/davecgh/go-spew/spew"
 )
 
@@ -26,9 +26,9 @@ func main() {
 
 	/*s := rest.Site{}
 
-	s.Id = "mateub"
-	s.Title = "mateub"
-	s.Description = ""
+	s.Id = "megasite"
+	s.Title = "megasite"
+	s.Description = "descriptiondescription"
 	s.Visibility = "PRIVATE"
 
 	res, err := dapi.Client.CreateSite(s)
@@ -57,11 +57,13 @@ func main() {
 	 * -----------------------------
 	 */
 
-	/*site, err := dapi.Client.GetSite("papi")
+	/*site, err := dapi.Client.GetSite("blabla")
 	if err != nil {
 		spew.Dump(err)
 	} else {
 		spew.Dump(site)
+		//Get the documentlibrary nodeId of a site
+		spew.Dump(site.Relations.Containers.List.Entries[0].Entry.Id)
 	}*/
 
 	/*
@@ -86,12 +88,31 @@ func main() {
 	q.Paging.MaxItems = 5
 	q.Paging.SkipCount = 0
 	*/
-	/*node, err := dapi.Client.GetNode(q)
+	/*path := "data dictionary/space templates/custom template"
+	nodeId, err := dapi.Client.GetNodeId(path, 1)
 	if err != nil {
 		spew.Dump(err)
 	} else {
 		//spew.Dump(node.Id)
+		spew.Dump(nodeId)
+	}*/
+
+	/*node, err := dapi.Client.GetNode(nodeId)
+	if err != nil {
+		spew.Dump(err)
+	} else {
 		spew.Dump(node)
+	}*/
+
+	/*cp := rest.Copy{}
+	cp.TargetParentId = "f90ce78e-f240-4ef5-934d-53cfe71f5286"
+	cp.Name = "Skilld files"
+
+	result, err := dapi.Client.CopyNode(nodeId, cp)
+	if err != nil {
+		spew.Dump(err)
+	} else {
+		spew.Dump(result)
 	}*/
 
 	/*
@@ -101,9 +122,9 @@ func main() {
 	 * creates 'a' & 'abc' at root, 'b' in 'a' and 'c' in 'b'
 	 * -----------------------------
 	 */
-	/*folders := []string{"/documentlibrary/lulu", "/documentlibrary/elele", "/documentlibrary/lala/lulu"}
+	/*folders := []string{"/lulu", "/elele", "/lala/lulu"}
 
-	err = dapi.Client.CreateFolderTemplate(res.Entry.Guid, folders)
+	err = dapi.Client.CreateFolderTemplate(site.Relations.Containers.List.Entries[0].Entry.Id, folders)
 	if err != nil {
 		spew.Dump(err)
 	}*/

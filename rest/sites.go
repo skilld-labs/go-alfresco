@@ -8,7 +8,27 @@ import (
 
 type Sites []Site
 type SiteRes struct {
-	Entry Site `json:"entry"`
+	Entry     Site `json:"entry"`
+	Relations struct {
+		Containers struct {
+			List struct {
+				Pagination struct {
+					Count        int  `json:"count"`
+					HasMoreItems bool `json:"hasMoreItems"`
+					TotalItems   int  `json:"totalItems"`
+					SkipCount    int  `json:"skipCount"`
+					MaxItems     int  `json:"maxItems"`
+				} `json:"pagination"`
+				Entries []SiteContainer `json:"entries"`
+			} `json:"list"`
+		}
+	} `json:"relations,omitempty"`
+}
+type SiteContainer struct {
+	Entry struct {
+		Id       string `json:"id,omitempty"`
+		FolderId string `json:"folderId,omitempty"`
+	} `json:"entry,omitempty"`
 }
 type SitesRes struct {
 	List struct {
@@ -35,16 +55,16 @@ func (c *Client) GetSites() (*SitesRes, error) {
 	return response, nil
 }
 
-func (c *Client) GetSite(shortName string) (Site, error) {
-	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+shortName, nil)
+func (c *Client) GetSite(shortName string) (*SiteRes, error) {
+	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+shortName+"?relations=containers", nil)
 	if err != nil {
-		return Site{}, err
+		return &SiteRes{}, err
 	}
-	response := new(SiteRes)
+	response := &SiteRes{}
 	if _, _, err = c.doRequest(req, response); err != nil {
-		return Site{}, err
+		return &SiteRes{}, err
 	}
-	return response.Entry, nil
+	return response, nil
 }
 
 func (c *Client) DeleteSite(shortName string) error {

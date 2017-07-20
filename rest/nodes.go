@@ -2,57 +2,69 @@ package rest
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
+type CmisObject struct {
+	Objects      []NodeCmisObject `json:"objects"`
+	HasMoreItems bool             `json:"hasMoreItems"`
+	NumItems     int              `json:"numItems"`
+}
 type NodeRes struct {
-	List struct {
-		Pagination struct {
-			Count        int  `json:"count"`
-			HasMoreItems bool `json:"hasMoreItems"`
-			TotalItems   int  `json:"totalItems"`
-			SkipCount    int  `json:"skipCount"`
-			MaxItems     int  `json:"maxItems"`
-		} `json:"pagination"`
-		Context struct {
-			Consistency struct {
-				LastTxId int `json:"lastTxId"`
-			} `json:"consistency"`
-		} `json:"context"`
-		Entries []struct {
-			Entry Node `json:"entry"`
-		} `json:"entries"`
-	} `json:"list"`
+	Entry Node `json:"entry"`
+}
+type Copy struct {
+	TargetParentId string `json:"targetParentId"`
+	Name           string `json:"name"`
 }
 
-type SearchQuery struct {
-	Query struct {
-		Language string `json:"language"`
-		String   string `json:"query"`
-	} `json:"query"`
-	Paging struct {
-		MaxItems  int `json:"maxItems"`
-		SkipCount int `json:"skipCount"`
-	} `json:"paging"`
+func (c *Client) GetNodeId(path string, limit int) (string, error) {
+	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/cmis/versions/1.1/browser/root/"+path+"?maxItems="+strconv.Itoa(limit), nil)
+	if err != nil {
+		return "", err
+	}
+	response := new(CmisObject)
+	if _, _, err := c.doRequest(req, response); err != nil {
+		return "", err
+	}
+	return response.Objects[0].Object.Properties.ParentId.Value, nil
 }
 
-//Got to rework this function
-/*func (c *Client) GetNode(query SearchQuery) (Node, error) {
-	jsonVal, _ := json.Marshal(query)
-	req, err := http.NewRequest("POST", c.getUrl()+"/alfresco/api/-default-/public/search/versions/1/search", bytes.NewBufferString(string(jsonVal)))
+// ^^^^^^^^^
+//To get a folder actual ID we need to get the parent since cmis browser returns the content of a found node
+//To get a site, we want its documentLibrary nodeId so we use the first result
+//Path like "sites/sitename/documentlibrary" doesn't work for some reason ... but "sites/sitename" does
+
+func (c *Client) GetNode(nodeId string) (Node, error) {
+	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/nodes/"+nodeId, nil)
 	if err != nil {
 		return Node{}, err
 	}
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Accept", "application/json")
 	response := new(NodeRes)
 	if _, _, err := c.doRequest(req, response); err != nil {
 		return Node{}, err
 	}
-	return response.List.Entries[0].Entry, nil
-}*/
+	return response.Entry, nil
+}
+
+func (c *Client) CopyNode(srcId string, dest interface{}) (*NodeRes, error) {
+	jsonVal, _ := json.Marshal(dest)
+	req, err := http.NewRequest("POST", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/nodes/"+srcId+"/copy", bytes.NewBufferString(string(jsonVal)))
+	if err != nil {
+		return &NodeRes{}, err
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Content-Type", "application/json")
+	response := &NodeRes{}
+	if _, _, err := c.doRequest(req, response); err != nil {
+		return &NodeRes{}, err
+	}
+	return response, nil
+}
 
 func (c *Client) CreateFolderTemplate(nodeId string, paths []string) error {
 	nodePath := "workspace://SpacesStore/" + nodeId

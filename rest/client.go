@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/davecgh/go-spew/spew"
 	"io/ioutil"
 	"net/http"
 )
@@ -41,16 +42,17 @@ func (c *Client) doRequest(request *http.Request, response interface{}) (headers
 			return http.ErrUseLastResponse
 		},
 	}
-
 	q := request.URL.Query()
 	q.Add("alf_ticket", c.session.AlfTicket)
 	request.URL.RawQuery = q.Encode()
-
+	spew.Dump("------------!!!!!!!!!!! REQUEEEEEEEEEEEEST !!!!!!!!!-------------")
+	spew.Dump(request)
 	r, err := client.Do(request)
 	if err != nil {
 		return
 	}
-
+	spew.Dump("------------!!!!!!!!!!! RESPOOOOOOOOOOONSE !!!!!!!!!-------------")
+	spew.Dump(r)
 	headers = r.Header
 	cookies = make(map[string]string)
 	ck := r.Cookies()
