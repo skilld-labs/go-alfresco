@@ -97,6 +97,14 @@ func main() {
 		spew.Dump(nodeId)
 	}*/
 
+	/*path := "data dictionary/space templates"
+	nodes, err := dapi.Client.GetNodeChilds(path, 999)
+	if err != nil {
+		spew.Dump(err)
+	} else {
+		spew.Dump(nodes)
+	}*/
+
 	/*node, err := dapi.Client.GetNode(nodeId)
 	if err != nil {
 		spew.Dump(err)

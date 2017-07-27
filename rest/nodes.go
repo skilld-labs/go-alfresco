@@ -34,6 +34,18 @@ func (c *Client) GetNodeId(path string, limit int) (string, error) {
 	return response.Objects[0].Object.Properties.ParentId.Value, nil
 }
 
+func (c *Client) GetNodeChilds(path string, limit int) (*CmisObject, error) {
+	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/cmis/versions/1.1/browser/root/"+path+"?maxItems="+strconv.Itoa(limit)+"&cmisselector=children", nil)
+	if err != nil {
+		return &CmisObject{}, err
+	}
+	response := &CmisObject{}
+	if _, _, err := c.doRequest(req, response); err != nil {
+		return &CmisObject{}, err
+	}
+	return response, nil
+}
+
 // ^^^^^^^^^
 //To get a folder actual ID we need to get the parent since cmis browser returns the content of a found node
 //To get a site, we want its documentLibrary nodeId so we use the first result
