@@ -57,7 +57,7 @@ func (c *Client) GetNode(nodeId string) (Node, error) {
 	return response.Entry, nil
 }
 
-func (c *Client) CopyNode(srcId string, dest string) (*NodeRes, error) {
+func (c *Client) CopyNode(srcId string, dest interface{}) (*NodeRes, error) {
 	jsonVal, _ := json.Marshal(dest)
 	req, err := http.NewRequest("POST", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/nodes/"+srcId+"/copy", bytes.NewBufferString(string(jsonVal)))
 	if err != nil {
