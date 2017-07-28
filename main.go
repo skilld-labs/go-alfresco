@@ -114,7 +114,6 @@ func main() {
 
 	/*cp := rest.Copy{}
 	cp.TargetParentId = "f90ce78e-f240-4ef5-934d-53cfe71f5286"
-	cp.Name = "Skilld files"
 
 	result, err := dapi.Client.CopyNode(nodeId, cp)
 	if err != nil {

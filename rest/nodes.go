@@ -19,7 +19,6 @@ type NodeRes struct {
 }
 type Copy struct {
 	TargetParentId string `json:"targetParentId"`
-	Name           string `json:"name"`
 }
 
 func (c *Client) GetNodeId(path string, limit int) (string, error) {
@@ -46,11 +45,6 @@ func (c *Client) GetNodeChilds(path string, limit int) (*CmisObject, error) {
 	return response, nil
 }
 
-// ^^^^^^^^^
-//To get a folder actual ID we need to get the parent since cmis browser returns the content of a found node
-//To get a site, we want its documentLibrary nodeId so we use the first result
-//Path like "sites/sitename/documentlibrary" doesn't work for some reason ... but "sites/sitename" does
-
 func (c *Client) GetNode(nodeId string) (Node, error) {
 	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/nodes/"+nodeId, nil)
 	if err != nil {
@@ -63,7 +57,7 @@ func (c *Client) GetNode(nodeId string) (Node, error) {
 	return response.Entry, nil
 }
 
-func (c *Client) CopyNode(srcId string, dest interface{}) (*NodeRes, error) {
+func (c *Client) CopyNode(srcId string, dest string) (*NodeRes, error) {
 	jsonVal, _ := json.Marshal(dest)
 	req, err := http.NewRequest("POST", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/nodes/"+srcId+"/copy", bytes.NewBufferString(string(jsonVal)))
 	if err != nil {
