@@ -43,6 +43,11 @@ type SitesRes struct {
 	} `json:"list"`
 }
 
+type Membership struct {
+	Role string `json:"role"`
+	Id   string `json:"id"`
+}
+
 func (c *Client) GetSites() (*SitesRes, error) {
 	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites", nil)
 	if err != nil {
@@ -90,4 +95,16 @@ func (c *Client) CreateSite(site Site) (*SiteRes, error) {
 		return &SiteRes{}, err
 	}
 	return response, nil
+}
+
+func (c *Client) AddMembersToSite(siteName string, users []Membership) error {
+	jsonVal, _ := json.Marshal(users)
+	req, err := http.NewRequest("POST", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+siteName+"/members", bytes.NewBufferString(string(jsonVal)))
+	if err != nil {
+		return err
+	}
+	if _, _, err := c.doRequest(req, nil); err != nil {
+		return err
+	}
+	return nil
 }
