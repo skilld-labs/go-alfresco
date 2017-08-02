@@ -2,7 +2,7 @@ package main
 
 import (
 	"./docs"
-	"./rest"
+	//"./rest"
 	"github.com/davecgh/go-spew/spew"
 )
 
@@ -153,12 +153,12 @@ func main() {
 	 * Test to get specific user
 	 * -----------------------------
 	 */
-	/*user, err := dapi.Client.GetUser("mmeunier")
+	user, err := dapi.Client.GetUser("mmeunier")
 	if err != nil {
 		spew.Dump(err)
 	}
 	spew.Dump(user)
-	*/
+
 	/*
 	 * -----------------------------
 	 * Test to register users in a site
@@ -173,6 +173,17 @@ func main() {
 	usr.Role = "SiteConsumer"
 	Memberships = append(Memberships, *usr)
 	err := dapi.Client.AddMembersToSite("ouech", Memberships)
+	if err != nil {
+		spew.Dump(err)
+	}*/
+
+	/*
+	 * -----------------------------
+	 * Test to remove a user from a site
+	 * -----------------------------
+	 */
+
+	/*err = dapi.Client.RemoveMemberFromSite("site", "user")
 	if err != nil {
 		spew.Dump(err)
 	}*/

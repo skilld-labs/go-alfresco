@@ -108,3 +108,14 @@ func (c *Client) AddMembersToSite(siteName string, users []Membership) error {
 	}
 	return nil
 }
+
+func (c *Client) RemoveMemberFromSite(siteName string, user string) error {
+	req, err := http.NewRequest("DELETE", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+siteName+"/members/"+user, nil)
+	if err != nil {
+		return err
+	}
+	if _, _, err := c.doRequest(req, nil); err != nil {
+		return err
+	}
+	return nil
+}
