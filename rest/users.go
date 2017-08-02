@@ -23,6 +23,19 @@ type UsersRes struct {
 	} `json:"list"`
 }
 
+type SiteUsers struct {
+	List struct {
+		Pagination struct {
+			Count        int  `json:"count"`
+			HasMoreItems bool `json:"hasMoreItems"`
+			TotalItems   int  `json:"totalItems"`
+			SkipCount    int  `json:"skipCount"`
+			MaxItems     int  `json:"maxItems"`
+		} `json:"pagination"`
+		Entries []UserRes `json:"entries"`
+	} `json:"list"`
+}
+
 type ticket struct {
 	Data struct {
 		Ticket string `json:"ticket"`
@@ -66,4 +79,16 @@ func (c *Client) GetUser(userName string) (User, error) {
 		return User{}, err
 	}
 	return response.Entry, nil
+}
+
+func (c *Client) GetUsersFromSite(siteName string) (*SiteUsers, error) {
+	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+siteName+"/members", nil)
+	if err != nil {
+		return &SiteUsers{}, err
+	}
+	response := new(SiteUsers)
+	if _, _, err = c.doRequest(req, response); err != nil {
+		return &SiteUsers{}, err
+	}
+	return response, nil
 }

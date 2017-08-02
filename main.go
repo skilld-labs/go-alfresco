@@ -153,12 +153,12 @@ func main() {
 	 * Test to get specific user
 	 * -----------------------------
 	 */
-	user, err := dapi.Client.GetUser("mmeunier")
+	/*user, err := dapi.Client.GetUser("user")
 	if err != nil {
 		spew.Dump(err)
 	}
 	spew.Dump(user)
-
+	*/
 	/*
 	 * -----------------------------
 	 * Test to register users in a site
@@ -187,4 +187,16 @@ func main() {
 	if err != nil {
 		spew.Dump(err)
 	}*/
+
+	/*
+	 * -----------------------------
+	 * Test to get site users
+	 * -----------------------------
+	 */
+
+	/*usrs, err := dapi.Client.GetUsersFromSite("site")
+	if err != nil {
+		spew.Dump(err)
+	}
+	spew.Dump(usrs)*/
 }
