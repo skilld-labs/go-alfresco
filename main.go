@@ -2,7 +2,7 @@ package main
 
 import (
 	"./docs"
-	//"./rest"
+	"./rest"
 	"github.com/davecgh/go-spew/spew"
 )
 
@@ -199,4 +199,24 @@ func main() {
 		spew.Dump(err)
 	}
 	spew.Dump(usrs)*/
+
+	/*
+	 * -----------------------------
+	 * Test to create a user
+	 * -----------------------------
+	 */
+
+	/*u := rest.User{}
+
+	u.Id = "test"
+	u.FirstName = "test"
+	u.LastName = "test"
+	u.Email = "test@test.te"
+	u.Password = "test"
+	u.Enabled = true
+
+	err := dapi.Client.CreateUser(u)
+	if err != nil {
+		spew.Dump(err)
+	}*/
 }

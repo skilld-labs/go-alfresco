@@ -2,11 +2,12 @@ package rest
 
 type User struct {
 	Id                        string   `json:"id"`
+	Password                  string   `json:"password,omitempty"`
 	Enabled                   bool     `json:"enabled"`
 	FirstName                 string   `json:"firstName"`
 	LastName                  string   `json:"lastName"`
-	Jobtitle                  string   `json:"jobtId"`
-	AvatarId                  string   `json:"avatarId"`
+	Jobtitle                  string   `json:"jobTitle"`
+	AvatarId                  string   `json:"avatarId,omitempty"`
 	Location                  string   `json:"location"`
 	Telephone                 string   `json:"telephone"`
 	Mobile                    string   `json:"mobile"`
@@ -14,7 +15,7 @@ type User struct {
 	SkypeId                   string   `json:"skypeId"`
 	InstantMsgId              string   `json:"instantMessageId"`
 	UserStatus                string   `json:"userStatus"`
-	StatusUpdatedAt           string   `json:"statusUpdatedAt"`
+	StatusUpdatedAt           string   `json:"statusUpdatedAt,omitempty"`
 	GoogleId                  string   `json:"googleId"`
 	EmailNotificationsEnabled bool     `json:"emailNotificationsEnabled"`
 	Description               string   `json:"description"`

@@ -2,6 +2,7 @@ package rest
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -91,4 +92,17 @@ func (c *Client) GetUsersFromSite(siteName string) (*SiteUsers, error) {
 		return &SiteUsers{}, err
 	}
 	return response, nil
+}
+
+func (c *Client) CreateUser(user User) error {
+	jsonVal, _ := json.Marshal(user)
+	req, err := http.NewRequest("POST", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/people", bytes.NewBufferString(string(jsonVal)))
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Accept", "application/json")
+	if _, _, err := c.doRequest(req, nil); err != nil {
+		return err
+	}
+	return nil
 }

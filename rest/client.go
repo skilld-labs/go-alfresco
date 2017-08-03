@@ -45,14 +45,10 @@ func (c *Client) doRequest(request *http.Request, response interface{}) (headers
 	q := request.URL.Query()
 	q.Add("alf_ticket", c.session.AlfTicket)
 	request.URL.RawQuery = q.Encode()
-	//spew.Dump("//////////////------REQUEST-----//////////////")
-	//spew.Dump(request)
 	r, err := client.Do(request)
 	if err != nil {
 		return
 	}
-	//spew.Dump("//////////////------RESPONSE-----//////////////")
-	//spew.Dump(r)
 	headers = r.Header
 	cookies = make(map[string]string)
 	ck := r.Cookies()
