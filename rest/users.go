@@ -106,3 +106,15 @@ func (c *Client) CreateUser(user User) error {
 	}
 	return nil
 }
+
+func (c *Client) DisableUser(user string) error {
+	req, err := http.NewRequest("PUT", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/people/"+user, bytes.NewBufferString(fmt.Sprintf(`{"enabled":"false"}`)))
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Accept", "application/json")
+	if _, _, err := c.doRequest(req, nil); err != nil {
+		return err
+	}
+	return nil
+}

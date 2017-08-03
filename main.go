@@ -2,7 +2,7 @@ package main
 
 import (
 	"./docs"
-	"./rest"
+	//"./rest"
 	"github.com/davecgh/go-spew/spew"
 )
 
@@ -216,6 +216,17 @@ func main() {
 	u.Enabled = true
 
 	err := dapi.Client.CreateUser(u)
+	if err != nil {
+		spew.Dump(err)
+	}*/
+
+	/*
+	 * -----------------------------
+	 * Test to update a user
+	 * -----------------------------
+	 */
+
+	/*err := dapi.Client.DisableUser("user")
 	if err != nil {
 		spew.Dump(err)
 	}*/
