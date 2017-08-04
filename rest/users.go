@@ -23,7 +23,6 @@ type UsersRes struct {
 		Entries []UserRes `json:"entries"`
 	} `json:"list"`
 }
-
 type SiteUsers struct {
 	List struct {
 		Pagination struct {
@@ -36,7 +35,6 @@ type SiteUsers struct {
 		Entries []UserRes `json:"entries"`
 	} `json:"list"`
 }
-
 type ticket struct {
 	Data struct {
 		Ticket string `json:"ticket"`

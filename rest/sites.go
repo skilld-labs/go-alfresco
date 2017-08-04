@@ -24,12 +24,6 @@ type SiteRes struct {
 		}
 	} `json:"relations,omitempty"`
 }
-type SiteContainer struct {
-	Entry struct {
-		Id       string `json:"id,omitempty"`
-		FolderId string `json:"folderId,omitempty"`
-	} `json:"entry,omitempty"`
-}
 type SitesRes struct {
 	List struct {
 		Pagination struct {
@@ -42,7 +36,12 @@ type SitesRes struct {
 		Entries []SiteRes `json:"entries"`
 	} `json:"list"`
 }
-
+type SiteContainer struct {
+	Entry struct {
+		Id       string `json:"id,omitempty"`
+		FolderId string `json:"folderId,omitempty"`
+	} `json:"entry,omitempty"`
+}
 type Membership struct {
 	Role string `json:"role"`
 	Id   string `json:"id"`

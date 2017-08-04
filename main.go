@@ -8,7 +8,14 @@ import (
 
 func main() {
 
-	dcfg := docs.Config{
+	/*
+	 * -----------------------------
+	 * Instantiate a new client
+	 * (docs refers to alfresco)
+	 * -----------------------------
+	 */
+
+	/*dcfg := docs.Config{
 		Endpoint: "***",
 		Username: "***",
 		Password: "***",
@@ -17,6 +24,7 @@ func main() {
 	test, _ := docs.New(dcfg)
 	dapi := docs.NewDAPI(test)
 	spew.Dump(dapi)
+	*/
 
 	/*
 	 * -----------------------------
@@ -26,10 +34,10 @@ func main() {
 
 	/*s := rest.Site{}
 
-	s.Id = "megasite"
-	s.Title = "megasite"
-	s.Description = "descriptiondescription"
-	s.Visibility = "PRIVATE"
+	s.Id = "siteid"
+	s.Title = "sitename"
+	s.Description = "site description"
+	s.Visibility = "" //PUBLIC, PRIVATE
 
 	res, err := dapi.Client.CreateSite(s)
 	if err != nil {
@@ -53,11 +61,11 @@ func main() {
 
 	/*
 	 * -----------------------------
-	 * Test to get one site (shorName in parameter)
+	 * Test to get one site
 	 * -----------------------------
 	 */
 
-	/*site, err := dapi.Client.GetSite("blabla")
+	/*site, err := dapi.Client.GetSite("siteid")
 	if err != nil {
 		spew.Dump(err)
 	} else {
@@ -68,10 +76,11 @@ func main() {
 
 	/*
 	 * -----------------------------
-	 * Test to delete site (ShortName in parameter)
+	 * Test to delete site
 	 * -----------------------------
 	 */
-	/*err := dapi.Client.DeleteSite("thesite")
+
+	/*err := dapi.Client.DeleteSite("siteid")
 	if err != nil {
 		spew.Dump(err)
 	}*/
@@ -82,20 +91,19 @@ func main() {
 	 * -----------------------------
 	 */
 
-	/*q := rest.SearchQuery{}
-	q.Query.Language = "lucene"
-	q.Query.String = `TYPE:"st:site" AND @cm\:name:"gutgut"`
-	q.Paging.MaxItems = 5
-	q.Paging.SkipCount = 0
-	*/
 	/*path := "data dictionary/space templates/custom template"
 	nodeId, err := dapi.Client.GetNodeId(path, 1)
 	if err != nil {
 		spew.Dump(err)
 	} else {
-		//spew.Dump(node.Id)
 		spew.Dump(nodeId)
 	}*/
+
+	/*
+	 * -----------------------------
+	 * Test to get node childs
+	 * -----------------------------
+	 */
 
 	/*path := "data dictionary/space templates"
 	nodes, err := dapi.Client.GetNodeChilds(path, 999)
@@ -105,12 +113,24 @@ func main() {
 		spew.Dump(nodes)
 	}*/
 
+	/*
+	 * -----------------------------
+	 * Test to get a full node object
+	 * -----------------------------
+	 */
+
 	/*node, err := dapi.Client.GetNode(nodeId)
 	if err != nil {
 		spew.Dump(err)
 	} else {
 		spew.Dump(node)
 	}*/
+
+	/*
+	 * -----------------------------
+	 * Test to copy a node (and its childs) in another
+	 * -----------------------------
+	 */
 
 	/*cp := rest.Copy{}
 	cp.TargetParentId = "f90ce78e-f240-4ef5-934d-53cfe71f5286"
@@ -129,7 +149,8 @@ func main() {
 	 * creates 'a' & 'abc' at root, 'b' in 'a' and 'c' in 'b'
 	 * -----------------------------
 	 */
-	/*folders := []string{"/lulu", "/elele", "/lala/lulu"}
+
+	/*folders := []string{"/a", "/abc", "/a/b/c"}
 
 	err = dapi.Client.CreateFolderTemplate(site.Relations.Containers.List.Entries[0].Entry.Id, folders)
 	if err != nil {
@@ -141,6 +162,7 @@ func main() {
 	 * Test to get all users
 	 * -----------------------------
 	 */
+
 	/*users, err := dapi.Client.GetUsers()
 	if err != nil {
 		spew.Dump(err)
@@ -153,17 +175,20 @@ func main() {
 	 * Test to get specific user
 	 * -----------------------------
 	 */
+
 	/*user, err := dapi.Client.GetUser("user")
 	if err != nil {
 		spew.Dump(err)
 	}
 	spew.Dump(user)
 	*/
+
 	/*
 	 * -----------------------------
 	 * Test to register users in a site
 	 * -----------------------------
 	 */
+
 	/*var Memberships = []rest.Membership{}
 	var usr = new(rest.Membership)
 	usr.Id = "user1"
