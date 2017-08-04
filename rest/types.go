@@ -103,7 +103,7 @@ type Node struct {
 	}
 }
 
-type NodeCmisObject struct {
+type CmisObject struct {
 	Object struct {
 		Properties struct {
 			ObjectId struct {

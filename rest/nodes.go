@@ -9,10 +9,10 @@ import (
 	"strings"
 )
 
-type CmisObject struct {
-	Objects      []NodeCmisObject `json:"objects"`
-	HasMoreItems bool             `json:"hasMoreItems"`
-	NumItems     int              `json:"numItems"`
+type CmisObjects struct {
+	Objects      []CmisObject `json:"objects"`
+	HasMoreItems bool         `json:"hasMoreItems"`
+	NumItems     int          `json:"numItems"`
 }
 type NodeRes struct {
 	Entry Node `json:"entry"`
@@ -26,21 +26,21 @@ func (c *Client) GetNodeId(path string, limit int) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	response := new(CmisObject)
+	response := new(CmisObjects)
 	if _, _, err := c.doRequest(req, response); err != nil {
 		return "", err
 	}
 	return response.Objects[0].Object.Properties.ParentId.Value, nil
 }
 
-func (c *Client) GetNodeChilds(path string, limit int) (*CmisObject, error) {
+func (c *Client) GetNodeChilds(path string, limit int) (*CmisObjects, error) {
 	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/cmis/versions/1.1/browser/root/"+path+"?maxItems="+strconv.Itoa(limit)+"&cmisselector=children", nil)
 	if err != nil {
-		return &CmisObject{}, err
+		return &CmisObjects{}, err
 	}
-	response := &CmisObject{}
+	response := &CmisObjects{}
 	if _, _, err := c.doRequest(req, response); err != nil {
-		return &CmisObject{}, err
+		return &CmisObjects{}, err
 	}
 	return response, nil
 }
