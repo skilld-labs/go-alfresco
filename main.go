@@ -15,7 +15,7 @@ func main() {
 	 * -----------------------------
 	 */
 
-	/*dcfg := docs.Config{
+	dcfg := docs.Config{
 		Endpoint: "***",
 		Username: "***",
 		Password: "***",
@@ -24,7 +24,6 @@ func main() {
 	test, _ := docs.New(dcfg)
 	dapi := docs.NewDAPI(test)
 	spew.Dump(dapi)
-	*/
 
 	/*
 	 * -----------------------------
