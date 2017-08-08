@@ -80,7 +80,7 @@ func (c *Client) GetUser(userName string) (User, error) {
 	return response.Entry, nil
 }
 
-func (c *Client) GetUsersFromSite(siteName string) (*SiteUsers, error) {
+func (c *Client) GetUsersFromSiteName(siteName string) (*SiteUsers, error) {
 	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+siteName+"/members", nil)
 	if err != nil {
 		return &SiteUsers{}, err

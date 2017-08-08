@@ -96,9 +96,9 @@ func (c *Client) CreateSite(site Site) (*SiteRes, error) {
 	return response, nil
 }
 
-func (c *Client) AddMembersToSite(siteName string, users []Membership) error {
+func (c *Client) AddMembersToSite(users []Membership, site Site) error {
 	jsonVal, _ := json.Marshal(users)
-	req, err := http.NewRequest("POST", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+siteName+"/members", bytes.NewBufferString(string(jsonVal)))
+	req, err := http.NewRequest("POST", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+site.Title+"/members", bytes.NewBufferString(string(jsonVal)))
 	if err != nil {
 		return err
 	}
@@ -108,8 +108,8 @@ func (c *Client) AddMembersToSite(siteName string, users []Membership) error {
 	return nil
 }
 
-func (c *Client) RemoveMemberFromSite(siteName string, user string) error {
-	req, err := http.NewRequest("DELETE", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+siteName+"/members/"+user, nil)
+func (c *Client) RemoveMemberFromSite(user string, site Site) error {
+	req, err := http.NewRequest("DELETE", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+site.Title+"/members/"+user, nil)
 	if err != nil {
 		return err
 	}
