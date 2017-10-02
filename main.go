@@ -2,8 +2,10 @@ package main
 
 import (
 	"./docs"
-	"./rest"
+	//"./rest"
 	"github.com/davecgh/go-spew/spew"
+	"io/ioutil"
+	"os"
 )
 
 func main() {
@@ -64,15 +66,12 @@ func main() {
 	 * -----------------------------
 	 */
 
-	/*site, err := dapi.Client.GetSite("bonjour")
+	/*site, err := dapi.Client.GetSite("akie")
 	if err != nil {
 		spew.Dump(err)
-	} else {
-		spew.Dump(site)
-		//Get the documentlibrary nodeId of a site
-		//spew.Dump(site.Relations.Containers.List.Entries[0].Entry.Id)
-	}*/
-
+	}
+	spew.Dump(site)
+	*/
 	/*
 	 * -----------------------------
 	 * Test to delete site
@@ -86,11 +85,11 @@ func main() {
 
 	/*
 	 * -----------------------------
-	 * Test to get a node
+	 * Test to get a node id
 	 * -----------------------------
 	 */
 
-	/*path := "data dictionary/space templates/custom template"
+	/*path := "data dictionary/space templates/audit"
 	nodeId, err := dapi.Client.GetNodeId(path, 1)
 	if err != nil {
 		spew.Dump(err)
@@ -175,12 +174,11 @@ func main() {
 	 * -----------------------------
 	 */
 
-	/*user, err := dapi.Client.GetUser("user")
-	if err != nil {
-		spew.Dump(err)
-	}
-	spew.Dump(user)
-	*/
+	/*	user, err := dapi.Client.GetUser("ahuret")
+		if err != nil {
+			spew.Dump(err)
+		}
+		spew.Dump(user)*/
 
 	/*
 	 * -----------------------------
@@ -259,4 +257,30 @@ func main() {
 	if err != nil {
 		spew.Dump(err)
 	}*/
+
+	/*
+	 * -----------------------------
+	 * Test to upload a document
+	 * -----------------------------
+	 */
+
+	//	params := map[string]string{
+	//		"destination":     "workspace://SpacesStore/7a4bae0e-278b-4cfd-a9f6-5e10d5b316f8",
+	//		"description":     "test description",
+	//		"uploadDirectory": "/",
+	//		"contenttype":     "cm:content",
+	//	}
+	//	file, err := os.Open("/tmp/invoices/test.pdf")
+	//	if err != nil {
+	//		spew.Dump(err)
+	//	}
+	//	fileContents, err := ioutil.ReadAll(file)
+	//	if err != nil {
+	//		spew.Dump(err)
+	//	}
+	//	err = dapi.Client.UploadFile(params, "filedata", fileContents, "test.pdf")
+	//	if err != nil {
+	//		spew.Dump(err)
+	//	}
+	//
 }
