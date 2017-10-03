@@ -4,8 +4,8 @@ import (
 	"./docs"
 	//"./rest"
 	"github.com/davecgh/go-spew/spew"
-	"io/ioutil"
-	"os"
+	//"io/ioutil"
+	//"os"
 )
 
 func main() {
@@ -89,12 +89,26 @@ func main() {
 	 * -----------------------------
 	 */
 
-	/*path := "data dictionary/space templates/audit"
-	nodeId, err := dapi.Client.GetNodeId(path, 1)
+	//	path := "sites/bla"
+	//	nodeId, err := dapi.Client.GetNodeId(path, 1)
+	//	if err != nil {
+	//		spew.Dump(err)
+	//	} else {
+	//		spew.Dump(nodeId)
+	//	}
+
+	/*
+	 * -----------------------------
+	 * Test to get a node by path
+	 * -----------------------------
+	 */
+
+	/*path := "sites/bla/documentLibrary/sale-orders"
+	testt, err := dapi.Client.GetNodeByPath(path, 1)
 	if err != nil {
 		spew.Dump(err)
 	} else {
-		spew.Dump(nodeId)
+		spew.Dump(testt)
 	}*/
 
 	/*
@@ -117,13 +131,13 @@ func main() {
 	 * -----------------------------
 	 */
 
-	/*node, err := dapi.Client.GetNode(nodeId)
-	if err != nil {
-		spew.Dump(err)
-	} else {
-		spew.Dump(node)
-	}*/
-
+	/*	node, err := dapi.Client.GetNode(nodeId)
+		if err != nil {
+			spew.Dump(err)
+		} else {
+			spew.Dump(node)
+		}
+	*/
 	/*
 	 * -----------------------------
 	 * Test to copy a node (and its childs) in another

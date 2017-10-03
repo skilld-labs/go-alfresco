@@ -103,6 +103,151 @@ type Node struct {
 	}
 }
 
+type SingleObject struct {
+	Properties struct {
+		ObjectId struct {
+			Id          string `json:"id"`
+			LocalName   string `json:"localName"`
+			DisplayName string `json:"displayName"`
+			QueryName   string `json:"queryName"`
+			Type        string `json:"type"`
+			Cardinality string `json:"Cardinality"`
+			Value       string `json:"value"`
+		} `json:"cmis:objectId"`
+		ObjectTypeId struct {
+			Id          string `json:"id"`
+			LocalName   string `json:"localName"`
+			DisplayName string `json:"displayName"`
+			QueryName   string `json:"queryName"`
+			Type        string `json:"type"`
+			Cardinality string `json:"Cardinality"`
+			Value       string `json:"value"`
+		} `json:"cmis:objectTypeId"`
+		BaseTypeId struct {
+			Id          string `json:"id"`
+			LocalName   string `json:"localName"`
+			DisplayName string `json:"displayName"`
+			QueryName   string `json:"queryName"`
+			Type        string `json:"type"`
+			Cardinality string `json:"Cardinality"`
+			Value       string `json:"value"`
+		} `json:"cmis:baseTypeId"`
+		NodeRef struct {
+			Id          string `json:"id"`
+			LocalName   string `json:"localName"`
+			DisplayName string `json:"displayName"`
+			QueryName   string `json:"queryName"`
+			Type        string `json:"type"`
+			Cardinality string `json:"Cardinality"`
+			Value       string `json:"value"`
+		} `json:"alfcmis:nodeRef"`
+		Path struct {
+			Id          string `json:"id"`
+			LocalName   string `json:"localName"`
+			DisplayName string `json:"displayName"`
+			QueryName   string `json:"queryName"`
+			Type        string `json:"type"`
+			Cardinality string `json:"Cardinality"`
+			Value       string `json:"value"`
+		} `json:"cmis:path"`
+		AllowedChildObjectTypeIds struct {
+			Id          string `json:"id"`
+			LocalName   string `json:"localName"`
+			DisplayName string `json:"displayName"`
+			QueryName   string `json:"queryName"`
+			Type        string `json:"type"`
+			Cardinality string `json:"Cardinality"`
+			Value       string `json:"value"`
+		} `json:"cmis:allowedChildObjectTypeIds"`
+		LastModifiedBy struct {
+			Id          string `json:"id"`
+			LocalName   string `json:"localName"`
+			DisplayName string `json:"displayName"`
+			QueryName   string `json:"queryName"`
+			Type        string `json:"type"`
+			Cardinality string `json:"Cardinality"`
+			Value       string `json:"value"`
+		} `json:"cmis:lastModifiedBy"`
+		SecondaryObjectTypeIds struct {
+			Id          string   `json:"id"`
+			LocalName   string   `json:"localName"`
+			DisplayName string   `json:"displayName"`
+			QueryName   string   `json:"queryName"`
+			Type        string   `json:"type"`
+			Cardinality string   `json:"Cardinality"`
+			Value       []string `json:"value"`
+		} `json:"cmis:secondaryObjectTypeIds"`
+		Description struct {
+			Id          string `json:"id"`
+			LocalName   string `json:"localName"`
+			DisplayName string `json:"displayName"`
+			QueryName   string `json:"queryName"`
+			Type        string `json:"type"`
+			Cardinality string `json:"Cardinality"`
+			Value       string `json:"value"`
+		} `json:"cmis:description"`
+		CreatedBy struct {
+			Id          string `json:"id"`
+			LocalName   string `json:"localName"`
+			DisplayName string `json:"displayName"`
+			QueryName   string `json:"queryName"`
+			Type        string `json:"type"`
+			Cardinality string `json:"Cardinality"`
+			Value       string `json:"value"`
+		} `json:"cmis:createdBy"`
+		ParentId struct {
+			Id          string `json:"id"`
+			LocalName   string `json:"localName"`
+			DisplayName string `json:"displayName"`
+			QueryName   string `json:"queryName"`
+			Type        string `json:"type"`
+			Cardinality string `json:"Cardinality"`
+			Value       string `json:"value"`
+		} `json:"cmis:parentId"`
+		CreationDate struct {
+			Id          string `json:"id"`
+			LocalName   string `json:"localName"`
+			DisplayName string `json:"displayName"`
+			QueryName   string `json:"queryName"`
+			Type        string `json:"type"`
+			Cardinality string `json:"Cardinality"`
+			Value       int    `json:"value"`
+		} `json:"cmis:creationDate"`
+		ChangeToken struct {
+			Id          string `json:"id"`
+			LocalName   string `json:"localName"`
+			DisplayName string `json:"displayName"`
+			QueryName   string `json:"queryName"`
+			Type        string `json:"type"`
+			Cardinality string `json:"Cardinality"`
+			Value       string `json:"value"`
+		} `json:"cmis:changeToken"`
+		Name struct {
+			Id          string `json:"id"`
+			LocalName   string `json:"localName"`
+			DisplayName string `json:"displayName"`
+			QueryName   string `json:"queryName"`
+			Type        string `json:"type"`
+			Cardinality string `json:"Cardinality"`
+			Value       string `json:"value"`
+		} `json:"cmis:name"`
+		LastModificationDate struct {
+			Id          string `json:"id"`
+			LocalName   string `json:"localName"`
+			DisplayName string `json:"displayName"`
+			QueryName   string `json:"queryName"`
+			Type        string `json:"type"`
+			Cardinality string `json:"Cardinality"`
+			Value       int    `json:"value"`
+		} `json:"cmis:lastModificationDate"`
+	} `json:properties`
+	PropertiesExtension struct {
+		Aspects struct {
+			AppliedAspects interface{} `json:"appliedAspects,omitempty"`
+		} `json:"aspects"`
+	} `json:"propertiesExtension"`
+}
+
 type CmisObject struct {
 	Object struct {
 		Properties struct {

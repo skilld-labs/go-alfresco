@@ -45,6 +45,18 @@ func (c *Client) GetNodeChilds(path string, limit int) (*CmisObjects, error) {
 	return response, nil
 }
 
+func (c *Client) GetNodeByPath(path string, limit int) (*SingleObject, error) {
+	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/cmis/versions/1.1/browser/root/"+path+"?cmisselector=object", nil)
+	if err != nil {
+		return &SingleObject{}, err
+	}
+	response := new(SingleObject)
+	if _, _, err := c.doRequest(req, response); err != nil {
+		return &SingleObject{}, err
+	}
+	return response, nil
+}
+
 func (c *Client) GetNode(nodeId string) (Node, error) {
 	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/nodes/"+nodeId, nil)
 	if err != nil {
