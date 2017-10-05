@@ -69,6 +69,17 @@ func (c *Client) GetNode(nodeId string) (Node, error) {
 	return response.Entry, nil
 }
 
+func (c *Client) DeleteNode(nodeId string) error {
+	req, err := http.NewRequest("DELETE", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/nodes/"+nodeId, nil)
+	if err != nil {
+		return err
+	}
+	if _, _, err := c.doRequest(req, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (c *Client) CopyNode(srcId string, dest interface{}) (*NodeRes, error) {
 	jsonVal, _ := json.Marshal(dest)
 	req, err := http.NewRequest("POST", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/nodes/"+srcId+"/copy", bytes.NewBufferString(string(jsonVal)))

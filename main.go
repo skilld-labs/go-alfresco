@@ -89,13 +89,13 @@ func main() {
 	 * -----------------------------
 	 */
 
-	//	path := "sites/bla"
-	//	nodeId, err := dapi.Client.GetNodeId(path, 1)
-	//	if err != nil {
-	//		spew.Dump(err)
-	//	} else {
-	//		spew.Dump(nodeId)
-	//	}
+	/*path := "sites/bla/documentLibrary/quotations"
+	nodeId, err := dapi.Client.GetNodeId(path, 1)
+	if err != nil {
+		spew.Dump(err)
+	} else {
+		spew.Dump(nodeId)
+	}*/
 
 	/*
 	 * -----------------------------
@@ -107,10 +107,20 @@ func main() {
 	testt, err := dapi.Client.GetNodeByPath(path, 1)
 	if err != nil {
 		spew.Dump(err)
-	} else {
-		spew.Dump(testt)
-	}*/
+	}
+	spew.Dump(testt.Properties.NodeRef.Value)
+	*/
 
+	/*
+	 * -----------------------------
+	 * Test to delete a node
+	 * -----------------------------
+	 */
+
+	/* err = dapi.Client.DeleteNode(testt.Properties.ObjectId.Value)
+	if err != nil {
+		spew.Dump(err)
+	}*/
 	/*
 	 * -----------------------------
 	 * Test to get node childs
