@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"net/http"
+	"strconv"
 )
 
 type Sites []Site
@@ -71,8 +72,8 @@ func (c *Client) GetSite(shortName string) (*SiteRes, error) {
 	return response, nil
 }
 
-func (c *Client) DeleteSite(shortName string) error {
-	req, err := http.NewRequest("DELETE", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+shortName, nil)
+func (c *Client) DeleteSite(shortName string, permanent bool) error {
+	req, err := http.NewRequest("DELETE", c.getUrl() + "/alfresco/api/-default-/public/alfresco/versions/1/sites/" + shortName + "?permanent=" + strconv.FormatBool(permanent), nil)
 	if err != nil {
 		return err
 	}
