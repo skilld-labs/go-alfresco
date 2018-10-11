@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"net/http"
+	"strconv"
 )
 
 type Sites []Site
@@ -13,7 +14,7 @@ type SiteRes struct {
 		Containers struct {
 			List struct {
 				Pagination struct {
-					Count        int  `json:"count"`
+					Count        int  `json:"cstrconvount"`
 					HasMoreItems bool `json:"hasMoreItems"`
 					TotalItems   int  `json:"totalItems"`
 					SkipCount    int  `json:"skipCount"`
@@ -72,11 +73,7 @@ func (c *Client) GetSite(shortName string) (*SiteRes, error) {
 }
 
 func (c *Client) DeleteSite(shortName string, permanent bool) error {
-	u := c.getUrl() + "/alfresco/api/-default-/public/alfresco/versions/1/sites/" + shortName
-	if permanent {
-		u += "?permanent=true"
-	}
-	req, err := http.NewRequest("DELETE", u, nil)
+	req, err := http.NewRequest("DELETE", c.getUrl() + "/alfresco/api/-default-/public/alfresco/versions/1/sites/" + shortName + "?permanent=" + strconv.FormatBool(permanent), nil)
 	if err != nil {
 		return err
 	}
