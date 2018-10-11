@@ -71,8 +71,12 @@ func (c *Client) GetSite(shortName string) (*SiteRes, error) {
 	return response, nil
 }
 
-func (c *Client) DeleteSite(shortName string) error {
-	req, err := http.NewRequest("DELETE", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+shortName, nil)
+func (c *Client) DeleteSite(shortName string, permanent bool) error {
+	u := c.getUrl() + "/alfresco/api/-default-/public/alfresco/versions/1/sites/" + shortName
+	if permanent {
+		u += "?permanent=true"
+	}
+	req, err := http.NewRequest("DELETE", u, nil)
 	if err != nil {
 		return err
 	}
