@@ -14,7 +14,7 @@ type SiteRes struct {
 		Containers struct {
 			List struct {
 				Pagination struct {
-					Count        int  `json:"cstrconvount"`
+					Count        int  `json:"count"`
 					HasMoreItems bool `json:"hasMoreItems"`
 					TotalItems   int  `json:"totalItems"`
 					SkipCount    int  `json:"skipCount"`
