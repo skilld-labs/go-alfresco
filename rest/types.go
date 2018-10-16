@@ -39,6 +39,7 @@ type Site struct {
 	SitePreset      string   `json:"sitePreset,omitempty"`
 	ShortName       string   `json:"shortName,omitempty"`
 	Title           string   `json:"title"`
+	Name            string   `json:"name,omitempty"`
 	Description     string   `json:"description"`
 	Node            string   `json:"node,omitempty"`
 	TagScope        string   `json:"tagScope,omitempty"`
