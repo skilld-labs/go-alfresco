@@ -73,7 +73,7 @@ func (c *Client) GetSite(shortName string) (*SiteRes, error) {
 }
 
 func (c *Client) DeleteSite(shortName string, permanent bool) error {
-	req, err := http.NewRequest("DELETE", c.getUrl() + "/alfresco/api/-default-/public/alfresco/versions/1/sites/" + shortName + "?permanent=" + strconv.FormatBool(permanent), nil)
+	req, err := http.NewRequest("DELETE", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+shortName+"?permanent="+strconv.FormatBool(permanent), nil)
 	if err != nil {
 		return err
 	}
@@ -118,4 +118,29 @@ func (c *Client) RemoveMemberFromSite(user string, site Site) error {
 		return err
 	}
 	return nil
+}
+
+func (c *Client) GetArchivedSites() (*SitesRes, error) {
+	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/deleted-nodes", nil)
+	if err != nil {
+		return &SitesRes{}, err
+	}
+	response := &SitesRes{}
+	if _, _, err = c.doRequest(req, response); err != nil {
+		return &SitesRes{}, err
+	}
+	return response, nil
+}
+
+func (c *Client) IsArchived(shortName string) (bool, error) {
+	sitesRes, err := c.GetArchivedSites()
+	if err != nil {
+		return false, err
+	}
+	for _, site := range sitesRes.List.Entries {
+		if site.Entry.Name == shortName {
+			return true, nil
+		}
+	}
+	return false, nil
 }
