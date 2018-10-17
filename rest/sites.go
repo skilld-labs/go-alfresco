@@ -132,6 +132,18 @@ func (c *Client) GetArchivedSites() (*SitesRes, error) {
 	return response, nil
 }
 
+func (c *Client) RestoreArchivedNode(nodeID string) (*SiteRes, error) {
+	req, err := http.NewRequest("POST", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/deleted-nodes/"+nodeID+"/restore", nil)
+	if err != nil {
+		return &SiteRes{}, err
+	}
+	response := &SiteRes{}
+	if _, _, err = c.doRequest(req, response); err != nil {
+		return response, err
+	}
+	return response, nil
+}
+
 func (c *Client) IsArchived(shortName string) (bool, error) {
 	sitesRes, err := c.GetArchivedSites()
 	if err != nil {
