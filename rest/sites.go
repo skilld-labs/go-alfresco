@@ -24,6 +24,7 @@ type SiteRes struct {
 			} `json:"list"`
 		}
 	} `json:"relations,omitempty"`
+	Role string `json:"role,omitempty"`
 }
 type SitesRes struct {
 	List struct {
@@ -118,6 +119,18 @@ func (c *Client) RemoveMemberFromSite(user string, site Site) error {
 		return err
 	}
 	return nil
+}
+
+func (c *Client) GetMemberSites(user string) (*SitesRes, error) {
+	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/people/"+user+"/sites", nil)
+	if err != nil {
+		return &SitesRes{}, err
+	}
+	response := &SitesRes{}
+	if _, _, err = c.doRequest(req, response); err != nil {
+		return &SitesRes{}, err
+	}
+	return response, nil
 }
 
 func (c *Client) GetArchivedSites() (*SitesRes, error) {
