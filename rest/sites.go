@@ -121,7 +121,7 @@ func (c *Client) RemoveMemberFromSite(user string, site Site) error {
 	return nil
 }
 
-func (c *Client) GetMemberSites(user string) (*SitesRes, error) {
+func (c *Client) GetUserSites(user string) (*SitesRes, error) {
 	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/people/"+user+"/sites", nil)
 	if err != nil {
 		return &SitesRes{}, err

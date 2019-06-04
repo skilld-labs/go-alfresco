@@ -117,7 +117,7 @@ func (c *Client) DisableUser(user string) error {
 	return nil
 }
 
-func (c *Client) UpdateMemberSiteMembership(userName string, siteName string, role string) error {
+func (c *Client) UpdateUserSiteMembership(userName string, siteName string, role string) error {
 	req, err := http.NewRequest("PUT", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+siteName+"/members/"+userName, bytes.NewBufferString(fmt.Sprintf(`{"role":"%s"}`, role)))
 	if err != nil {
 		return err
@@ -127,5 +127,4 @@ func (c *Client) UpdateMemberSiteMembership(userName string, siteName string, ro
 		return err
 	}
 	return nil
-
 }
