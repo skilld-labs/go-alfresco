@@ -62,7 +62,7 @@ func (c *Client) GetSites() (*SitesRes, error) {
 }
 
 func (c *Client) GetSite(shortName string) (*SiteRes, error) {
-	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+shortName+"?relations=containers", nil)
+	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+shortName+"/containers?fields=url", nil)
 	if err != nil {
 		return &SiteRes{}, err
 	}
@@ -98,9 +98,24 @@ func (c *Client) CreateSite(site Site) (*SiteRes, error) {
 	return response, nil
 }
 
-func (c *Client) AddMembersToSite(users []Membership, site Site) error {
+func (c *Client) UpdateSite(id string, site Site) (*SiteRes, error) {
+	site.Id = ""
+	jsonVal, _ := json.Marshal(site)
+	req, err := http.NewRequest("PUT", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+id, bytes.NewBufferString(string(jsonVal)))
+	if err != nil {
+		return &SiteRes{}, err
+	}
+	req.Header.Set("Accept", "application/json")
+	response := &SiteRes{}
+	if _, _, err := c.doRequest(req, response); err != nil {
+		return &SiteRes{}, err
+	}
+	return response, nil
+}
+
+func (c *Client) AddMembersToSite(users []Membership, id string) error {
 	jsonVal, _ := json.Marshal(users)
-	req, err := http.NewRequest("POST", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+site.Title+"/members", bytes.NewBufferString(string(jsonVal)))
+	req, err := http.NewRequest("POST", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+id+"/members", bytes.NewBufferString(string(jsonVal)))
 	if err != nil {
 		return err
 	}
@@ -110,8 +125,8 @@ func (c *Client) AddMembersToSite(users []Membership, site Site) error {
 	return nil
 }
 
-func (c *Client) RemoveMemberFromSite(user string, site Site) error {
-	req, err := http.NewRequest("DELETE", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+site.Title+"/members/"+user, nil)
+func (c *Client) RemoveMemberFromSite(user string, id string) error {
+	req, err := http.NewRequest("DELETE", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+id+"/members/"+user, nil)
 	if err != nil {
 		return err
 	}
