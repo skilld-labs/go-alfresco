@@ -62,7 +62,7 @@ func (c *Client) GetSites() (*SitesRes, error) {
 }
 
 func (c *Client) GetSite(shortName string) (*SiteRes, error) {
-	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+shortName+"/containers?fields=url", nil)
+	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+shortName+"?relations=containers", nil)
 	if err != nil {
 		return &SiteRes{}, err
 	}
