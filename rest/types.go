@@ -38,15 +38,15 @@ type Site struct {
 	Url             string   `json:"url,omitempty"`
 	SitePreset      string   `json:"sitePreset,omitempty"`
 	ShortName       string   `json:"shortName,omitempty"`
-	Title           string   `json:"title"`
+	Title           string   `json:"title,omitempty"`
 	Name            string   `json:"name,omitempty"`
-	Description     string   `json:"description"`
+	Description     string   `json:"description,omitempty"`
 	Node            string   `json:"node,omitempty"`
 	TagScope        string   `json:"tagScope,omitempty"`
 	SiteManagers    []string `json:"siteManagers,omitempty"`
 	IsMemberOfGroup bool     `json:"isMemberOfGroup,omitempty"`
 	IsPublic        bool     `json:"isPublic,omitempty"`
-	Visibility      string   `json:"visibility"`
+	Visibility      string   `json:"visibility,omitempty"`
 }
 
 type Node struct {
