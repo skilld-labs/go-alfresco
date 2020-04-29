@@ -117,6 +117,18 @@ func (c *Client) DisableUser(user string) error {
 	return nil
 }
 
+func (c *Client) EnableUser(user string) error {
+	req, err := http.NewRequest("PUT", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/people/"+user, bytes.NewBufferString(fmt.Sprintf(`{"enabled":"true"}`)))
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Accept", "application/json")
+	if _, _, err := c.doRequest(req, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (c *Client) UpdateUserSiteMembership(userName string, siteName string, role string) error {
 	req, err := http.NewRequest("PUT", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+siteName+"/members/"+userName, bytes.NewBufferString(fmt.Sprintf(`{"role":"%s"}`, role)))
 	if err != nil {
