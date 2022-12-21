@@ -49,8 +49,8 @@ type Membership struct {
 	Id   string `json:"id"`
 }
 
-func (c *Client) GetSites() (*SitesRes, error) {
-	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites", nil)
+func (c *Client) GetSites(limit int) (*SitesRes, error) {
+	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites?maxItems="+strconv.Itoa(limit), nil)
 	if err != nil {
 		return &SitesRes{}, err
 	}
@@ -136,8 +136,8 @@ func (c *Client) RemoveMemberFromSite(user string, id string) error {
 	return nil
 }
 
-func (c *Client) GetUserSites(user string) (*SitesRes, error) {
-	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/people/"+user+"/sites", nil)
+func (c *Client) GetUserSites(user string, limit int) (*SitesRes, error) {
+	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/people/"+user+"/sites?maxItems="+strconv.Itoa(limit), nil)
 	if err != nil {
 		return &SitesRes{}, err
 	}
@@ -148,8 +148,8 @@ func (c *Client) GetUserSites(user string) (*SitesRes, error) {
 	return response, nil
 }
 
-func (c *Client) GetArchivedSites() (*SitesRes, error) {
-	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/deleted-nodes", nil)
+func (c *Client) GetArchivedSites(limit int) (*SitesRes, error) {
+	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/deleted-nodes?maxItems="+strconv.Itoa(limit), nil)
 	if err != nil {
 		return &SitesRes{}, err
 	}
@@ -173,7 +173,7 @@ func (c *Client) RestoreArchivedNode(nodeID string) (*SiteRes, error) {
 }
 
 func (c *Client) IsArchived(shortName string) (bool, error) {
-	sitesRes, err := c.GetArchivedSites()
+	sitesRes, err := c.GetArchivedSites(100000)
 	if err != nil {
 		return false, err
 	}

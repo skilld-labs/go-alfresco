@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 )
 
 type Users []User
@@ -56,8 +57,8 @@ func (c *Client) Login(username string, password string) error {
 	return nil
 }
 
-func (c *Client) GetUsers() (*UsersRes, error) {
-	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/people", nil)
+func (c *Client) GetUsers(limit int) (*UsersRes, error) {
+	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/people?maxItems="+strconv.Itoa(limit), nil)
 	if err != nil {
 		return &UsersRes{}, err
 	}
@@ -80,8 +81,8 @@ func (c *Client) GetUser(userName string) (User, error) {
 	return response.Entry, nil
 }
 
-func (c *Client) GetUsersFromSiteName(siteName string) (*SiteUsers, error) {
-	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+siteName+"/members", nil)
+func (c *Client) GetUsersFromSiteName(siteName string, limit int) (*SiteUsers, error) {
+	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/sites/"+siteName+"/members?maxItems="+strconv.Itoa(limit), nil)
 	if err != nil {
 		return &SiteUsers{}, err
 	}
