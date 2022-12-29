@@ -2,7 +2,6 @@ package rest
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -60,7 +59,7 @@ func (c *Client) doRequest(request *http.Request, response interface{}) (headers
 		return
 	}
 	if r.StatusCode < 200 || r.StatusCode >= 400 {
-		err = errors.New("Request error: " + r.Status)
+		err = fmt.Errorf("Request error (%s): %s", r.Status, string(bodyBytes))
 		return
 	}
 	if r.StatusCode >= 200 && r.StatusCode < 300 {
