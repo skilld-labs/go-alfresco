@@ -17,6 +17,18 @@ type CmisObjects struct {
 type NodeRes struct {
 	Entry Node `json:"entry"`
 }
+type NodesRes struct {
+	List struct {
+		Pagination struct {
+			Count        int  `json:"count"`
+			HasMoreItems bool `json:"hasMoreItems"`
+			TotalItems   int  `json:"totalItems"`
+			SkipCount    int  `json:"skipCount"`
+			MaxItems     int  `json:"maxItems"`
+		} `json:"pagination"`
+		Entries []NodeRes `json:"entries"`
+	} `json:"list"`
+}
 type Copy struct {
 	TargetParentId string `json:"targetParentId"`
 }
@@ -31,6 +43,18 @@ func (c *Client) GetNodeId(path string, limit int) (string, error) {
 		return "", err
 	}
 	return response.Objects[0].Object.Properties.ParentId.Value, nil
+}
+
+func (c *Client) GetDeletedNodes() (*NodesRes, error) {
+	req, err := http.NewRequest("GET", c.getUrl()+"/alfresco/api/-default-/public/alfresco/versions/1/deleted-nodes?include=properties&maxItems=10000", nil)
+	if err != nil {
+		return &NodesRes{}, err
+	}
+	response := &NodesRes{}
+	if _, _, err = c.doRequest(req, response); err != nil {
+		return response, err
+	}
+	return response, nil
 }
 
 func (c *Client) GetNodeChilds(path string, limit int) (*CmisObjects, error) {
