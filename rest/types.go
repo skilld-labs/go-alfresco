@@ -67,7 +67,7 @@ type Node struct {
 	Id         string `json:"id"`
 	NodeType   string `json:"nodeType"`
 	Properties struct {
-		Title       string `json:cm:title,omitempty`
+		Title       string `json:"cm:title,omitempty"`
 		Visibility  string `json:"st:siteVisiblity,omitempty"`
 		SitePreset  string `json:"st:sitePreset,omitempty"`
 		Description string `json:"cm:description,omitempty"`
