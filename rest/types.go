@@ -49,6 +49,20 @@ type Site struct {
 	Visibility      string   `json:"visibility,omitempty"`
 }
 
+type SiteRole struct {
+	Id   string `json:"id"`
+	Guid string `json:"guid,omitempty"`
+	Role string `json:"role"`
+	Site Site   `json:"site"`
+}
+
+type SiteMember struct {
+	Id   			string `json:"id"`
+	Person			User   `json:"person"`
+	Role			string `json:"role"`
+	IsMemberOfGroup	bool   `json:"isMemberOfGroup"`
+}
+
 type Node struct {
 	AspectNames   []string `json:"aspectNames"`
 	CreatedAt     string   `json:"createdAt"`
@@ -394,4 +408,20 @@ type CmisObject struct {
 			} `json:"aspects"`
 		} `json:"propertiesExtension"`
 	} `json:"object"`
+}
+
+type Group struct {
+	ID           string   `json:"id" binding:"required"`
+	DisplayName  string   `json:"displayName" binding:"required"`
+	Description  string   `json:"description,omitempty"`
+	IsRoot       bool     `json:"isRoot"`
+	HasSubgroups bool     `json:"hasSubgroups,omitempty"`
+	ParentIDs    []string `json:"parentIds,omitempty"`
+	Zones        []string `json:"zones,omitempty"`
+}
+
+type GroupMember struct {
+	ID          string `json:"id" binding:"required"`
+	DisplayName string `json:"displayName" binding:"required"`
+	MemberType  string `json:"memberType" binding:"required"`
 }

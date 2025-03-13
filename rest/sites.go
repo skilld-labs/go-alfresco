@@ -3,6 +3,7 @@ package rest
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 )
@@ -38,6 +39,24 @@ type SitesRes struct {
 		Entries []SiteRes `json:"entries"`
 	} `json:"list"`
 }
+
+type SiteRoleRes struct {
+	Entry SiteRole `json:"entry"`
+}
+
+type SiteRolesRes struct {
+	List struct {
+		Pagination struct {
+			Count        int  `json:"count"`
+			HasMoreItems bool `json:"hasMoreItems"`
+			TotalItems   int  `json:"totalItems"`
+			SkipCount    int  `json:"skipCount"`
+			MaxItems     int  `json:"maxItems"`
+		} `json:"pagination"`
+		Entries []SiteRoleRes `json:"entries"`
+	} `json:"list"`
+}
+
 type SiteContainer struct {
 	Entry struct {
 		Id       string `json:"id,omitempty"`
@@ -144,6 +163,27 @@ func (c *Client) GetUserSites(user string, limit int) (*SitesRes, error) {
 	response := &SitesRes{}
 	if _, _, err = c.doRequest(req, response); err != nil {
 		return &SitesRes{}, err
+	}
+	return response, nil
+}
+
+func (c *Client) GetUserSiteRoles(user string, opts ...RequestOption) (*SiteRolesRes, error) {
+	options := &RequestOptions{
+		skipCount: 0,
+		maxItems:  100,
+	}
+	for _, opt := range opts {
+		opt(options)
+	}
+	url := fmt.Sprintf("%s/alfresco/api/-default-/public/alfresco/versions/1/people/%s/sites?skipCount=%d&maxItems=%d",
+		c.getUrl(), user, options.skipCount, options.maxItems)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return &SiteRolesRes{}, err
+	}
+	response := new(SiteRolesRes)
+	if _, _, err := c.doRequest(req, response); err != nil {
+		return &SiteRolesRes{}, err
 	}
 	return response, nil
 }

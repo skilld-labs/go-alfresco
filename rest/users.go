@@ -12,6 +12,10 @@ type Users []User
 type UserRes struct {
 	Entry User `json:"entry"`
 }
+type SiteMemberRes struct {
+	Entry SiteMember `json:"entry"`
+}
+
 type UsersRes struct {
 	List struct {
 		Pagination struct {
@@ -33,7 +37,7 @@ type SiteUsers struct {
 			SkipCount    int  `json:"skipCount"`
 			MaxItems     int  `json:"maxItems"`
 		} `json:"pagination"`
-		Entries []UserRes `json:"entries"`
+		Entries []SiteMemberRes `json:"entries"`
 	} `json:"list"`
 }
 type ticket struct {
