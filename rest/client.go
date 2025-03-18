@@ -22,6 +22,14 @@ type session struct {
 	}
 }
 
+type RequestOption func(*RequestOptions)
+
+type RequestOptions struct {
+	skipCount int
+	maxItems  int
+	where     string
+}
+
 func NewClient(host string, port string, tls bool) *Client {
 	protocol := "http"
 	if tls {
@@ -71,4 +79,22 @@ func (c *Client) doRequest(request *http.Request, response interface{}) (headers
 		return
 	}
 	return
+}
+
+func WithSkipCount(skip int) RequestOption {
+	return func(o *RequestOptions) {
+		o.skipCount = skip
+	}
+}
+
+func WithMaxItems(max int) RequestOption {
+	return func(o *RequestOptions) {
+		o.maxItems = max
+	}
+}
+
+func WithWhere(where string) RequestOption {
+	return func(o *RequestOptions) {
+		o.where = where
+	}
 }
